@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlatformGame", "PlatformGame\PlatformGame.vcxproj", "{544E84AB-2DA7-439B-B96C-F1E756F62C9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Debug|x64.ActiveCfg = Debug|x64
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Debug|x64.Build.0 = Debug|x64
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Debug|x86.ActiveCfg = Debug|Win32
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Debug|x86.Build.0 = Debug|Win32
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Release|x64.ActiveCfg = Release|x64
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Release|x64.Build.0 = Release|x64
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Release|x86.ActiveCfg = Release|Win32
+		{544E84AB-2DA7-439B-B96C-F1E756F62C9D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C26D537A-549B-4AF3-8D5A-0B7E7D262A64}
+	EndGlobalSection
+EndGlobal
