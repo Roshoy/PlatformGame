@@ -1,24 +1,17 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include "Engine.h"
+#include "Game.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1000.f, 1000.f), "Platform");
+	window->setFramerateLimit(60);
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
-		window.clear();
-		window.draw(shape);
-		window.display();
-	}
-
+	Game* game = new Game(*window);
+	game->runGame();
+	/*int g;
+	cin >> g;*/
 	return 0;
 }

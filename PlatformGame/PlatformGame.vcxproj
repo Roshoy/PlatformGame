@@ -146,7 +146,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Fruk.cpp" />
+    <ClCompile Include="Sources\Moveable.cpp" />
+    <ClCompile Include="Sources\Player.cpp" />
+    <ClCompile Include="Sources\Button.cpp" />
+    <ClCompile Include="Sources\Character.cpp" />
+    <ClCompile Include="Sources\Engine.cpp" />
+    <ClCompile Include="Sources\Fields\Field.cpp" />
+    <ClCompile Include="Sources\Game.cpp" />
     <ClCompile Include="Sources\Main.cpp" />
+    <ClCompile Include="Sources\Map.cpp" />
+    <ClCompile Include="Sources\Menu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sources\Fruk.h" />
+    <ClInclude Include="Sources\Moveable.h" />
+    <ClInclude Include="Sources\Player.h" />
+    <ClInclude Include="Sources\Button.h" />
+    <ClInclude Include="Sources\Character.h" />
+    <ClInclude Include="Sources\Engine.h" />
+    <ClInclude Include="Sources\Fields\Field.h" />
+    <ClInclude Include="Sources\Game.h" />
+    <ClInclude Include="Sources\Map.h" />
+    <ClInclude Include="Sources\Menu.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\Fields\FieldsSpriteSheet.png" />
+    <Image Include="Textures\Fruk\FrukSpriteSheet.png" />
+    <Image Include="Textures\Player\PlayerSpriteSheet.PNG" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
