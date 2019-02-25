@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Character.h"
 #include <list>
+#include "TextureManager.h"
 
 using namespace sf;
 using namespace std;
@@ -30,6 +31,7 @@ public:
 	GameState collisionX(vector<Character>& enemy);
 
 private:
+	TextureManager textureManager;
 	void spawnPlayer();
 	void spawnEnemy();
 	float screenSpeedX;

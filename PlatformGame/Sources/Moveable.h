@@ -25,6 +25,7 @@ public:
 	void jump();
 
 	bool loadTexture(std::string & texturesDir);
+	static unsigned int spriteCount;
 
 protected:
 
@@ -43,6 +44,6 @@ protected:
 	float retardation;
 
 	bool inAir;
-	unsigned int spriteCount;
+	
 	void draw(RenderTarget& target, RenderStates states)const override;
 };

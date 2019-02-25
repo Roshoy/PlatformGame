@@ -11,15 +11,16 @@ Engine::Engine(sf::RenderWindow& win) {
 	screenSpeedX = 0;
 	screenSpeedY = 0;
 	maxScreenSpeed = 10;
+	textureManager.loadTextures();
 }
 
 Engine::GameState Engine::runEngine()
-{	
-	
+{		
+	textureManager.setMapTextures(*map);
 	map->loadMapFile();
-	spawnPlayer();
-	spawnEnemy();
 	
+	spawnPlayer();
+	spawnEnemy();	
 
 	GameState gameState = On;
 
@@ -169,13 +170,13 @@ Engine::CollisionResult Engine::collisionOutcome(Character & objA, Character & o
 	{
 		return Nothing;
 	}
-	if(objA.getCharacterType() == "Player" &&
-		objA.getCurrentRect().height + objA.getCurrentRect().top < objB.getCurrentRect().top)
+
+	if(objA.getCharacterType() == Character::Player)
 	{
-		return BDies;
-	}
-	if(objA.getCharacterType() == "Player")
-	{
+		if(objA.getCurrentRect().height + objA.getCurrentRect().top < objB.getCurrentRect().top)
+		{
+			return BDies;
+		}
 		return ADies;
 	}	
 	return Nothing;
@@ -209,8 +210,8 @@ void Engine::spawnPlayer()
 	{
 		std::cout << "No Player spawned!\n";
 	};
-
-	player->loadTexture(texturesDir);
+	
+	textureManager.setCharacterTextures(*player);
 }
 
 void Engine::spawnEnemy()
@@ -219,7 +220,7 @@ void Engine::spawnEnemy()
 	int x = 0, y = 0;
 	do {
 		Character* newEnemy = new Fruk();
-		newEnemy->loadTexture(texturesDir);
+		textureManager.setCharacterTextures(*newEnemy);
 		enemies.push_back(*newEnemy);
 	} while (enemies.back().spawn(*map, 3, x, y));
 	enemies.pop_back();

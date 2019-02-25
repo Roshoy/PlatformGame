@@ -10,9 +10,15 @@ using namespace std;
 
 class Character : public Moveable {
 public:
-	Character(Vector2f scale = Vector2f(0, 0),string charName = "", Vector2f size = Vector2f(0,0));	
+	enum CharacterType
+	{
+		Player = 0,
+		Fruk = 1
+	};
+	static unsigned int characterTypesCount;
+	Character(Vector2f scale = Vector2f(0, 0),CharacterType charName = Player, Vector2f size = Vector2f(0,0));	
 
-	string getCharacterType();
+	CharacterType getCharacterType();
 
 	bool spawn(Map& map, int type, int& xInit, int& yInit);
 
@@ -25,8 +31,11 @@ public:
 					  Right1    = 6,
 					  Right2    = 7};
 	bool loadTexture(std::string texturesDir);
+	void setTextures(sf::Texture* texture);
+	static unsigned int spriteCount;
+	
 protected:
 
-	string characterType;
+	CharacterType characterType;
 	void draw(RenderTarget& target, RenderStates states)const override;
 };

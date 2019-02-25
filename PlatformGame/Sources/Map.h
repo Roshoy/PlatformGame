@@ -13,7 +13,7 @@ public:
 	Map(float size = 0.f, int x = 1, int y = 1);
 	vector <vector <Field>> fields;
 	void setField(int x, int y, int type);
-	Texture *texture;
+	
 	void setMapSize(int x, int y);
 	void saveMapFile();
 	void loadMapFile();	
@@ -22,6 +22,7 @@ public:
 	int getFieldType(int x, int y);
 
 	bool loadTextures();
+	void setTextures(sf::Texture* texture);
 
 	Field getField(Vector2f position);
 	Field getField(int x, int y);
@@ -32,11 +33,13 @@ public:
 	float getRightMoveLimit(FloatRect player);
 	float getDownMoveLimit(FloatRect player);
 	float getLeftMoveLimit(FloatRect player);
-	
-private:
-	static std::string texturesDir;
+
 	static int fieldTypesCount;
-	RectangleShape* background;
+
+private:
+	sf::Texture *texture;
+	static std::string texturesDir;	
+	sf::RectangleShape* background;
 	virtual void draw(RenderTarget &target, RenderStates states)const;
 
 

@@ -157,6 +157,7 @@
     <ClCompile Include="Sources\Main.cpp" />
     <ClCompile Include="Sources\Map.cpp" />
     <ClCompile Include="Sources\Menu.cpp" />
+    <ClCompile Include="Sources\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\Fruk.h" />
@@ -169,11 +170,12 @@
     <ClInclude Include="Sources\Game.h" />
     <ClInclude Include="Sources\Map.h" />
     <ClInclude Include="Sources\Menu.h" />
+    <ClInclude Include="Sources\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\Fields\FieldsSpriteSheet.png" />
-    <Image Include="Textures\Fruk\FrukSpriteSheet.png" />
-    <Image Include="Textures\Player\PlayerSpriteSheet.PNG" />
+    <Image Include="Textures\FieldsSpriteSheet.png" />
+    <Image Include="Textures\FrukSpriteSheet.png" />
+    <Image Include="Textures\PlayerSpriteSheet.PNG" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

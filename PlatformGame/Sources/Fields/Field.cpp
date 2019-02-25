@@ -16,6 +16,7 @@ void Field::setPosition(Vector2f pos)
 
 void Field::setTexture(Texture* tex)
 {
+	if (tex == nullptr)std::cout << "Given tex array is null\n";
 	sprite.setTexture(tex[type]);
 }
 

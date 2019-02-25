@@ -1,10 +1,9 @@
 #include "Moveable.h"
 
+unsigned int Moveable::spriteCount = 1;
+
 Moveable::Moveable(Vector2f scale, Vector2f size)
 {
-	spriteCount = 1;
-	texture = new sf::Texture[spriteCount];
-
 	body = new sf::Sprite;
 
 	body->setScale(scale);
@@ -144,24 +143,24 @@ void Moveable::jump()
 	}
 }
 
-bool Moveable::loadTexture(string & texturesDir)
-{
-	sf::Image* img = new sf::Image();
-	if (!img->loadFromFile(texturesDir)) {
-		std::cout << "Failed to load " + texturesDir + "\n";
-		return false;
-	}
-	for (int i = 0; i < spriteCount; i++)
-	{
-		if (!texture[i].loadFromImage(*img,
-			sf::IntRect(i * size.x, 0, size.x, size.y)))
-		{
-			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + texturesDir + "\n";
-			return false;
-		}
-	}
-	return true;
-}
+//bool Moveable::loadTexture(string & texturesDir)
+//{
+//	sf::Image* img = new sf::Image();
+//	if (!img->loadFromFile(texturesDir)) {
+//		std::cout << "Failed to load " + texturesDir + "\n";
+//		return false;
+//	}
+//	for (int i = 0; i < spriteCount; i++)
+//	{
+//		if (!texture[i].loadFromImage(*img,
+//			sf::IntRect(i * size.x, 0, size.x, size.y)))
+//		{
+//			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + texturesDir + "\n";
+//			return false;
+//		}
+//	}
+//	return true;
+//}
 
 void Moveable::draw(RenderTarget& target, RenderStates states) const
 {

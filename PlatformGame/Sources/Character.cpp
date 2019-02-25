@@ -1,15 +1,17 @@
 #include "Character.h"
 
 using namespace std;
-Character::Character(sf::Vector2f scale, string charName, sf::Vector2f size) :Moveable(scale, size)
-{	
-	spriteCount = 8;
-	texture = new sf::Texture[spriteCount];
-	characterType = charName;
 
+unsigned int Character::spriteCount = 8;
+unsigned int Character::characterTypesCount = 2;
+
+Character::Character(sf::Vector2f scale, CharacterType charName, sf::Vector2f size) :Moveable(scale, size)
+{	
+	
+	characterType = charName;
 }
 
-string Character::getCharacterType()
+Character::CharacterType Character::getCharacterType()
 {
 	return characterType;
 }
@@ -36,28 +38,34 @@ bool Character::spawn(Map & map, int characterType, int& x, int& y)
 	}
 	return false;
 }
+//
+//bool Character::loadTexture(string texturesDir)
+//{
+//	texture = new sf::Texture[spriteCount];
+//	texturesDir += characterType + "/";
+//	sf::Image* img = new sf::Image();
+//	if (!img->loadFromFile(texturesDir + characterType + "SpriteSheet.PNG")) {
+//		std::cout << "Failed to load " + characterType + "SpriteSheet.PNG\n";
+//		return false;
+//	}
+//	for (int i = 0; i < spriteCount; i++)
+//	{
+//		if (!texture[i].loadFromImage(*img,
+//			sf::IntRect(i * size.x/body->getScale().x, 0,
+//				size.x / body->getScale().x, size.y / body->getScale().y)))
+//		{
+//			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + characterType + "SpriteSheet.PNG\n";
+//			return false;
+//		}
+//	}
+//
+//	std::cout << "Textures loaded for: " << characterType;
+//	return true;
+//}
 
-bool Character::loadTexture(string texturesDir)
+void Character::setTextures(sf::Texture * texture)
 {
-	texturesDir += characterType + "/";
-	sf::Image* img = new sf::Image();
-	if (!img->loadFromFile(texturesDir + characterType + "SpriteSheet.PNG")) {
-		std::cout << "Failed to load " + characterType + "SpriteSheet.PNG\n";
-		return false;
-	}
-	for (int i = 0; i < spriteCount; i++)
-	{
-		if (!texture[i].loadFromImage(*img,
-			sf::IntRect(i * size.x/body->getScale().x, 0,
-				size.x / body->getScale().x, size.y / body->getScale().y)))
-		{
-			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + characterType + "SpriteSheet.PNG\n";
-			return false;
-		}
-	}
-
-	std::cout << "Textures loaded for: " << characterType;
-	return true;
+	this->texture = texture;
 }
 
 

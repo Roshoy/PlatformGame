@@ -48,6 +48,9 @@
     <ClCompile Include="Sources\Fruk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\Fields\Field.h">
@@ -80,15 +83,18 @@
     <ClInclude Include="Sources\Fruk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\Player\PlayerSpriteSheet.PNG">
+    <Image Include="Textures\FieldsSpriteSheet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\Fruk\FrukSpriteSheet.png">
+    <Image Include="Textures\FrukSpriteSheet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\Fields\FieldsSpriteSheet.png">
+    <Image Include="Textures\PlayerSpriteSheet.PNG">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -5,14 +5,11 @@ std::string Map::texturesDir = "Textures/Fields/FieldsSpriteSheet.png";
 
 Map::Map(float ssize, int x, int y)
 {
-	texture = new Texture[fieldTypesCount];
-	loadTextures();
 	background = new RectangleShape(Vector2f(0, 0));
 	background->setFillColor(Color(100, 150, 255));
 
 	size = ssize;
 	setMapSize(x, y);
-
 }
 
 void Map::setField(int x, int y, int type)
@@ -50,7 +47,7 @@ void Map::setMapSize(int x, int y)
 		for (int j = 0; j < y; j++) {
 			tab.push_back(Field(size, i, j));
 			tab[j].setType(static_cast<Field::FieldType>(0));
-			tab[j].setTexture(texture);
+			//tab[j].setTexture(texture);
 		}
 		fields.push_back(tab);
 	}
@@ -137,6 +134,11 @@ bool Map::loadTextures()
 		}
 	}
 
+}
+
+void Map::setTextures(sf::Texture * texture)
+{
+	this->texture = texture;
 }
 
 Field Map::getField(Vector2f position)
