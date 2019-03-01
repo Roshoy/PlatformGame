@@ -12,6 +12,7 @@ Engine::Engine(sf::RenderWindow& win) {
 	screenSpeedY = 0;
 	maxScreenSpeed = 10;
 	textureManager.loadTextures();
+	testString = "Start";
 }
 
 Engine::GameState Engine::runEngine()
@@ -21,11 +22,13 @@ Engine::GameState Engine::runEngine()
 	
 	spawnPlayer();
 	spawnEnemy();	
-
+	collisionManager = new CollisionManager(player, enemies);
+	collisionManager->setTestString(&testString);
 	GameState gameState = On;
 
 	while (window->isOpen()) {
-		
+		//testString = player.getPosition().x;
+		//std::cout << testString << '\n';
 		Event event;
 		if (window->pollEvent(event)) {
 			if (event.type == Event::Closed) {
@@ -42,7 +45,7 @@ Engine::GameState Engine::runEngine()
 		window->setView(*map_view);
 		window->clear();
 		window->draw(*map);
-		window->draw(*player);
+		window->draw(player);
 		
 		for (std::list<Character>::iterator i = enemies.begin(); i != enemies.end(); ++i) {
 			window->draw(*i);
@@ -59,10 +62,10 @@ Engine::GameState Engine::runEngine()
 
 void Engine::scrollMap()
 {
-	Vector2i MPlayerPos = window->mapCoordsToPixel(player->getPosition());
+	Vector2i MPlayerPos = window->mapCoordsToPixel(player.getPosition());
 
-	if (MPlayerPos.x + player->getSize().x > 700 && map_view->getCenter().x + window->getSize().x / 2 < 
-		map->getMapRange().x * map->size - screenSpeedX - 1) {
+	if (MPlayerPos.x + player.getSize().x > 700 && map_view->getCenter().x + window->getSize().x / 2 < 
+		map->getMapRange().x * map->scale - screenSpeedX - 1) {
 		if (maxScreenSpeed > screenSpeedX) {
 			screenSpeedX += 1.f;
 		}
@@ -79,7 +82,7 @@ void Engine::scrollMap()
 		screenSpeedX = 0;
 	}
 
-	if (MPlayerPos.y > 800 && map_view->getCenter().y + window->getSize().y / 2 < map->getMapRange().y * map->size - screenSpeedY - 1) {
+	if (MPlayerPos.y > 800 && map_view->getCenter().y + window->getSize().y / 2 < map->getMapRange().y * map->scale - screenSpeedY - 1) {
 		if (maxScreenSpeed > screenSpeedY) {
 			screenSpeedY += 1.f;
 		}
@@ -97,7 +100,7 @@ void Engine::scrollMap()
 	}
 }
 
-void Engine::getControlsInputToPlayer() const
+void Engine::getControlsInputToPlayer() 
 {
 	sf::Vector2i* direction = new sf::Vector2i(0,0);
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
@@ -109,16 +112,17 @@ void Engine::getControlsInputToPlayer() const
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		direction->y = 1;
 	}
-	player->updateSpeed(*direction);
+	player.updateSpeed(*direction);
 }
 
 Engine::GameState Engine::playerMovement()
 {	
 	getControlsInputToPlayer();
-	player->updateNextPosition(*map);
-
-	GameState gameState = playerCollisionWithEnemies();
-	player->updatePosition();
+	player.updateNextPosition(*map);
+	CollisionManager::CollisionResult res = collisionManager->playerCollisionWithEnemies();
+	GameState gameState = On;
+	if (res == CollisionManager::ADies)gameState = Lose;
+	player.updatePosition();
 	if (gameState != On) {
 		return gameState;
 	}
@@ -156,62 +160,17 @@ void Engine::frukMovement()
 	}
 }
 
-bool Engine::collisionWillBeBetweenCharacters(Character & objA, Character & objB)
-{
-	sf::FloatRect objARect = objA.getNextRect();
-	sf::FloatRect objBRect = objB.getNextRect();
-
-	return objARect.intersects(objBRect);
-}
-
-Engine::CollisionResult Engine::collisionOutcome(Character & objA, Character & objB)
-{
-	if(!collisionWillBeBetweenCharacters(objA,objB))
-	{
-		return Nothing;
-	}
-
-	if(objA.getCharacterType() == Character::Player)
-	{
-		if(objA.getCurrentRect().height + objA.getCurrentRect().top < objB.getCurrentRect().top)
-		{
-			return BDies;
-		}
-		return ADies;
-	}	
-	return Nothing;
-}
-
-Engine::GameState Engine::playerCollisionWithEnemies()
-{
-	for (std::list<Character>::iterator iter = enemies.begin(); iter != enemies.end(); ++iter)
-	{
-		
-		switch (collisionOutcome(*player, *iter))
-		{
-		case ADies:
-			return Lose;
-		case BDies:
-			enemies.erase(iter++);
-			iter--;
-			break;
-		case Nothing:
-			break;
-		}
-	}
-	return On;
-}
 
 void Engine::spawnPlayer()
 {
 	int x = 0, y = 0;
-	player = new Player();
-	if (!player->spawn(*map, 2, x, y))
+	player = Player();
+	if (!player.spawn(*map, 2, x, y))
 	{
 		std::cout << "No Player spawned!\n";
 	};
 	
-	textureManager.setCharacterTextures(*player);
+	textureManager.setCharacterTextures(player);
 }
 
 void Engine::spawnEnemy()
@@ -226,23 +185,9 @@ void Engine::spawnEnemy()
 	enemies.pop_back();
 }
 
-int Engine::tileCounting(int type)
-{
-	int w = 0;
-	for (int x = 0; x < map->getMapRange().x; x++) {
-		for (int y = 0; y < map->getMapRange().y; y++) {
-
-			if (map->getFieldType(x, y) == type) {
-				w++;
-			}
-		}
-	}
-	return w;
-}
-
 bool Engine::playerWon()
 {
-	return characterOnTileType(*player, 4);
+	return characterOnTileType(player, 4);
 }
 
 bool Engine::characterOnTileType(Character & character, int tileType)

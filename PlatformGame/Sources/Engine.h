@@ -6,6 +6,8 @@
 #include "Character.h"
 #include <list>
 #include "TextureManager.h"
+#include "CollisionManager.h"
+#include "Player.h"
 
 using namespace sf;
 using namespace std;
@@ -16,21 +18,14 @@ public:
 	Engine(RenderWindow& win);
 	GameState runEngine();
 	void scrollMap();
-	void getControlsInputToPlayer() const;
+	void getControlsInputToPlayer();
 	GameState playerMovement();
 	void frukMovement();
 
-	static bool collisionWillBeBetweenCharacters(Character& objA, Character& objB);
-	enum CollisionResult{Nothing, ADies, BDies};
-	CollisionResult collisionOutcome(Character& objA, Character& objB);
-
-	GameState playerCollisionWithEnemies();
-
-	GameState collisionY(vector<Character>& enemy);
-
-	GameState collisionX(vector<Character>& enemy);
 
 private:
+	std::string testString;
+	CollisionManager* collisionManager;
 	TextureManager textureManager;
 	void spawnPlayer();
 	void spawnEnemy();
@@ -39,11 +34,11 @@ private:
 	float maxScreenSpeed;
 	Map* map;
 	RenderWindow* window;
-	Character* player;
+	Player player;
 	std::list<Character> enemies;
 	View* map_view;
 	static std::string texturesDir;
-	int tileCounting(int type);
+
 	bool playerWon();
 	bool characterOnTileType(Character& character, int tileType);
 

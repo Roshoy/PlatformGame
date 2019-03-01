@@ -1,5 +1,7 @@
 #include "Map.h"
 
+
+
 int Map::fieldTypesCount = 4;
 std::string Map::texturesDir = "Textures/Fields/FieldsSpriteSheet.png";
 
@@ -7,50 +9,57 @@ Map::Map(float ssize, int x, int y)
 {
 	background = new RectangleShape(Vector2f(0, 0));
 	background->setFillColor(Color(100, 150, 255));
+	mapDimensions.x = x;
+	mapDimensions.y = y;
+	scale = ssize;
 
-	size = ssize;
+	fieldTypesMap[Field::Empty] = &createInstance<Field>;
+	fieldTypesMap[Field::Brick] = &createInstance<BrickWall>;
+	fieldTypesMap[Field::PlayerSpawn] = &createInstance<PlayerSpawn>;
+	fieldTypesMap[Field::FrukSpawn] = &createInstance<Field>;
+	fieldTypesMap[Field::Win] = &createInstance<Field>;
 	setMapSize(x, y);
 }
 
 void Map::setField(int x, int y, int type)
 {
-	if (x < 0 || y < 0 || x >= fields.size() || y >= fields[0].size() || fields[x][y].getType() == type) {
+	if (x < 0 || y < 0 || x >= mapDimensions.x || y >= mapDimensions.y || 
+		(fields[pair<int, int>(x,y)]!=nullptr && fields[pair<int, int>(x, y)]->getType() == type)) {
 		return;
 	}
-	if (type == 2) {
-		for (int xx = 0; xx < fields.size(); xx++) {
-			for (int yy = 0; yy < fields[0].size(); yy++) {
-				if (fields[xx][yy].getType() == 2) {
-					fields[xx][yy].setType(Field::Empty);
-					fields[xx][yy].setTexture(texture);
-					yy = fields[xx].size();
-					xx = fields.size();
-				}
+
+	fields[pair<int, int>(x, y)] = fieldTypesMap[static_cast<Field::FieldType>(type)]();
+	fields[pair<int, int>(x, y)]->init(scale, x, y, static_cast<Field::FieldType>(type));
+
+	//if type is unique empty current field of that type 
+	if(fields[pair<int,int>(x,y)]->isUnique())
+	{
+		for(auto it = fields.begin(); it != fields.end();++it)
+		{
+			if(it->first != pair<int,int>(x,y) && it->second->getType() == type)
+			{
+				it->second = new Field();
+				it->second->init(scale, x, y);
+				break;
 			}
 		}
 	}
 
-	fields[x][y].setType(static_cast<Field::FieldType>(type));
-	
-	fields[x][y].setTexture(texture);
-	
-	
+	fields[pair<int, int>(x, y)]->setTexture(texture);
 }
 
 void Map::setMapSize(int x, int y)
 {
-	fields.clear();
-	background->setSize(Vector2f(x*size, y*size));
-
-	for (int i = 0; i < x; i++) {
-		vector<Field>tab;
-		for (int j = 0; j < y; j++) {
-			tab.push_back(Field(size, i, j));
-			tab[j].setType(static_cast<Field::FieldType>(0));
-			//tab[j].setTexture(texture);
-		}
-		fields.push_back(tab);
+	for (auto it = fields.begin(); it != fields.end(); ++it)
+	{
+		delete[] fields[it->first];
 	}
+	
+	mapDimensions.x = x;
+	mapDimensions.y = y;
+		
+	background->setSize(Vector2f(x*scale, y*scale));
+
 }
 
 void Map::saveMapFile()
@@ -60,13 +69,13 @@ void Map::saveMapFile()
 	if (!file.good()) {
 		cout << "Blad zapisu mapy" << endl;
 	}
-	file << size << " " << fields.size() << " " << fields[0].size() << "\n";
-	if (fields.size() > 0) {
-		for (int y = 0; y < fields[0].size(); y++) {
-			for (int x = 0; x < fields.size(); x++) {
-				file << fields[x][y].getType() << " ";
+	file << scale << " " << mapDimensions.x << " " << mapDimensions.y << "\n";
+	if (mapDimensions.x > 0) {
+		for (int y = 0; y < mapDimensions.y; y++) {
+			for (int x = 0; x < mapDimensions.x; x++) {
+				file << fields[pair<int, int>(x,y)]->getType() << " ";
 			}
-			if (y != fields[0].size() - 1) {
+			if (y != mapDimensions.y - 1) {
 				file << "\n";
 			}
 		}
@@ -78,19 +87,19 @@ void Map::loadMapFile()
 	fstream file;
 	file.open("MapFile.txt", ios::in);
 	if (!file.good()) {
-		cout << "Blad zapisu mapy" << endl;
+		std::cout << "Blad wczytania mapy" << std::endl;
 	}
 	int x;
 	int y;
-	file >> size;
+	file >> scale;
 	file >> x;
 	file >> y;
 
 	setMapSize(x, y);
 
 	if (x > 0 && y > 0) {
-		for (y = 0; y < fields[0].size(); y++) {
-			for (x = 0; x < fields.size(); x++) {
+		for (y = 0; y < mapDimensions.y; y++) {
+			for (x = 0; x < mapDimensions.x; x++) {
 				int t;
 				file >> t;
 				setField(x, y, t);
@@ -102,16 +111,16 @@ void Map::loadMapFile()
 
 int Map::getFieldType(Vector2f position)
 {
-	if (position.x / size < fields.size() && position.y / size < fields[0].size()) {
-		return fields[int(position.x / size)][int(position.y / size)].getType();
+	if (position.x / scale < mapDimensions.x && position.y / scale < mapDimensions.y) {
+		return fields[pair<int, int>(int(position.x / scale),int(position.y / scale))]->getType();
 	}
 	return 0;
 }
 
 int Map::getFieldType(int x, int y)
 {
-	if (x < fields.size() && y < fields[0].size()) {
-		return fields[x][y].getType();
+	if (x < mapDimensions.x && y < mapDimensions.y) {
+		return fields[pair<int, int>(x, y)]->getType();
 	}
 	return 0;
 }
@@ -143,130 +152,145 @@ void Map::setTextures(sf::Texture * texture)
 
 Field Map::getField(Vector2f position)
 {
-	int x = position.x / size;
-	int y = position.y / size;
-	if (x < fields.size() && y < fields[0].size()) {
-		return fields[x][y];
+	int x = position.x / scale;
+	int y = position.y / scale;
+	if (x < mapDimensions.x && y < mapDimensions.y) {
+		return *fields[pair<int, int>(x, y)];
 	}
 	return NULL;
 }
 
 Field Map::getField(int x, int y)
 {
-	if (x < fields.size() && y < fields[0].size()) {
-		return fields[x][y];
+	if (x < mapDimensions.x && y < mapDimensions.y) {
+		return *fields[pair<int, int>(x, y)];
 	}
 	return NULL;
 }
 
 Vector2i Map::getMapRange()
 {
-	return Vector2i(fields.size(), fields[0].size());
+	return Vector2i(mapDimensions.x, mapDimensions.y);
 }
 
-float Map::getUpMoveLimit(FloatRect player)
+float Map::getUpMoveLimit(FloatRect character)
 {
-	int L = int(player.left / size);
-	int P = int((player.left + player.width) / size);
-	int y = int(player.top / size) - 1;
+	int L = int(character.left / scale);
+	int P = int((character.left + character.width) / scale);
+	int y = int(character.top / scale) - 1;
 
-	if (P*size == player.left + player.width) {
+	if (P*scale == character.left + character.width) {
 		P--;
 	}
 
 	if (y >= 0) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (fields[x][y].getType() == 1) {
-				return (y + 1)*size;  ///(y górnej czêœci gracza * size) daje górn¹ granicê pola gdzie znajduje siê góra gracza
+			if (getField(x, y).isSolid()) {
+				return (y + 1)*scale;  ///(y górnej czêœci gracza * size) daje górn¹ granicê pola gdzie znajduje siê góra gracza
 			}
 		}
 	}
 	return -1000;
 }
 
-float Map::getRightMoveLimit(FloatRect player)
+float Map::getRightMoveLimit(FloatRect character)
 {
-	int L = int(player.top / size);
-	int P = int((player.top + player.height) / size);
-	int x = int((player.left + player.width) / size) + 1;
+	int L = int(character.top / scale);
+	int P = int((character.top + character.height) / scale);
+	int x = int((character.left + character.width) / scale) + 1;
 
-	if ((x - 1)*size == player.left + player.width) {
+	if ((x - 1)*scale == character.left + character.width) {
 		x--;
 	}
 
-	if (P*size == player.top + player.height) {
+	if (P*scale == character.top + character.height) {
 		P--;
 	}
 
 
-	if (x < fields.size()) {
+	if (x < mapDimensions.x) {
 		for (int y = L; y <= P && y >= 0; y++) {
-			if (fields[x][y].getType() == 1) {
-				return (x)*size;
+			if (getField(x, y).isSolid()) {
+				return (x)*scale;
 			}
 		}
 	}
 
-	return size*fields.size();
+	return scale* mapDimensions.x;
 }
 
-float Map::getDownMoveLimit(FloatRect player)
+float Map::getDownMoveLimit(FloatRect character)
 {
-	int L = int(player.left / size);//11
-	int P = int((player.left + player.width) / size);//12
+	int L = int(character.left / scale);//11
+	int P = int((character.left + character.width) / scale);//12
 
-	int y = int((player.top + player.height) / size) + 1;//11
+	int y = int((character.top + character.height) / scale) + 1;//11
 
-	if ((y - 1)*size == player.top + player.height) {
+	if ((y - 1)*scale == character.top + character.height) {
 		y--;
-
-
 	}
 
-	if (P*size == player.left + player.width) {
+	if (P*scale == character.left + character.width) {
 		P--;
-
 	}
 
-	if (y < fields[0].size()) {
+	if (y < mapDimensions.y) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (fields[x][y].getType() == 1) {
-				return y*size;
+			if (getField(x,y).isSolid()) {
+				return y*scale;
 			}
 		}
 	}
-	return fields[0].size()*size;
+	return mapDimensions.y*scale;
 }
 
-float Map::getLeftMoveLimit(FloatRect player)
+float Map::getLeftMoveLimit(FloatRect character)
 {
-	int L = int(player.top / size);
-	int P = int((player.top + player.height) / size);
-	int x = int((player.left) / size) - 1;
+	int L = int(character.top / scale);
+	int P = int((character.top + character.height) / scale);
+	int x = int((character.left) / scale) - 1;
 
-	if (P*size == player.top + player.height) {
+	if (P*scale == character.top + character.height) {
 		P--;
 	}
 
 	if (x >= 0) {
 		for (int y = L; y <= P && y >= 0; y++) {
-			if (fields[x][y].getType() == 1) {
-				return (x + 1)*size;
+			if (getField(x,y).isSolid()) {
+				return (x + 1)*scale;
 			}
 		}
 	}
 	return 0;
 }
 
+int Map::countFieldsOfType(Field::FieldType type)
+{
+	int w = 0;
+	for (int x = 0; x < getMapRange().x; x++) {
+		for (int y = 0; y < getMapRange().y; y++) {
+			if (getFieldType(x, y) == type) {
+				w++;
+			}
+		}
+	}
+	return w;
+}
+
 void Map::draw(RenderTarget & target, RenderStates states) const
 {
 	Transform transform = getTransform();
 	target.draw(*background, transform);
-	for (int x = 0; x < fields.size(); x++) {
-		for (int y = 0; y < fields[x].size(); y++) {
-			if (fields[x][y].getType() != 0) {
-				target.draw(fields[x][y], transform);
+	for(auto it: fields)
+	{
+		target.draw(*it.second, transform);
+	}
+	/*for (int x = 0; x < mapDimensions.x; x++) {
+		for (int y = 0; y < mapDimensions.y; y++) {
+			
+			if (fields[Vector2i(x, y)].getType() != 0) {
+				target.draw(*fields[Vector2i(x, y)], transform);
 			}
 		}
-	}
+	}*/
 }

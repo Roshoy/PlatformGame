@@ -146,6 +146,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Fields\PlayerSpawn.cpp" />
+    <ClCompile Include="Sources\Fields\BrickWall.cpp" />
+    <ClCompile Include="Sources\CollisionManager.cpp" />
     <ClCompile Include="Sources\Fruk.cpp" />
     <ClCompile Include="Sources\Moveable.cpp" />
     <ClCompile Include="Sources\Player.cpp" />
@@ -160,6 +163,9 @@
     <ClCompile Include="Sources\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sources\Fields\PlayerSpawn.h" />
+    <ClInclude Include="Sources\Fields\BrickWall.h" />
+    <ClInclude Include="Sources\CollisionManager.h" />
     <ClInclude Include="Sources\Fruk.h" />
     <ClInclude Include="Sources\Moveable.h" />
     <ClInclude Include="Sources\Player.h" />

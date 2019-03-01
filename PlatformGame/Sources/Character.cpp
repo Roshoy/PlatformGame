@@ -24,7 +24,7 @@ bool Character::spawn(Map & map, int characterType, int& x, int& y)
 			
 			if (map.getFieldType(x, y) == characterType) {
 
-				body->setPosition(x*map.size, y*map.size);
+				body->setPosition(x*map.scale, y*map.scale);
 				nextPosition = body->getPosition();
 				if (map.getFieldType(x, y) != 2) {
 					map.setField(x, y, 0);
@@ -38,30 +38,7 @@ bool Character::spawn(Map & map, int characterType, int& x, int& y)
 	}
 	return false;
 }
-//
-//bool Character::loadTexture(string texturesDir)
-//{
-//	texture = new sf::Texture[spriteCount];
-//	texturesDir += characterType + "/";
-//	sf::Image* img = new sf::Image();
-//	if (!img->loadFromFile(texturesDir + characterType + "SpriteSheet.PNG")) {
-//		std::cout << "Failed to load " + characterType + "SpriteSheet.PNG\n";
-//		return false;
-//	}
-//	for (int i = 0; i < spriteCount; i++)
-//	{
-//		if (!texture[i].loadFromImage(*img,
-//			sf::IntRect(i * size.x/body->getScale().x, 0,
-//				size.x / body->getScale().x, size.y / body->getScale().y)))
-//		{
-//			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + characterType + "SpriteSheet.PNG\n";
-//			return false;
-//		}
-//	}
-//
-//	std::cout << "Textures loaded for: " << characterType;
-//	return true;
-//}
+
 
 void Character::setTextures(sf::Texture * texture)
 {
