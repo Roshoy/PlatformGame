@@ -18,6 +18,16 @@ Character::CharacterType Character::getCharacterType()
 
 bool Character::spawn(Map & map, int characterType, int& x, int& y)
 {
+	for (auto it = map.fields.begin(); it != map.fields.end(); ++it) {
+		if (it->second->getType() == characterType) {
+			body->setPosition(x*map.scale, y*map.scale);
+			nextPosition = body->getPosition();
+
+			cout << "type: " << characterType << " spawned!\n";
+			return true;
+		}
+	}
+
 	for (x; x < map.getMapRange().x; x++) {
 		
 		for (y; y < map.getMapRange().y; y++) {
@@ -26,9 +36,7 @@ bool Character::spawn(Map & map, int characterType, int& x, int& y)
 
 				body->setPosition(x*map.scale, y*map.scale);
 				nextPosition = body->getPosition();
-				if (map.getFieldType(x, y) != 2) {
-					map.setField(x, y, 0);
-				}
+				
 				cout <<"type: "<<characterType<< " spawned!\n";
 				return true;
 			}

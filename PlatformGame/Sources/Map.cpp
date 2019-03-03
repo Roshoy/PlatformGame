@@ -23,11 +23,12 @@ Map::Map(float ssize, int x, int y)
 
 void Map::setField(int x, int y, int type)
 {
+	std::cout << "Przed!\n";
 	if (x < 0 || y < 0 || x >= mapDimensions.x || y >= mapDimensions.y || 
 		(fields[pair<int, int>(x,y)]!=nullptr && fields[pair<int, int>(x, y)]->getType() == type)) {
 		return;
 	}
-
+	std::cout << "Po!\n";
 	fields[pair<int, int>(x, y)] = fieldTypesMap[static_cast<Field::FieldType>(type)]();
 	fields[pair<int, int>(x, y)]->init(scale, x, y, static_cast<Field::FieldType>(type));
 
@@ -36,6 +37,7 @@ void Map::setField(int x, int y, int type)
 	{
 		for(auto it = fields.begin(); it != fields.end();++it)
 		{
+			std::cout << "Pierwsze pole do wpisania!\n";
 			if(it->first != pair<int,int>(x,y) && it->second->getType() == type)
 			{
 				it->second = new Field();
@@ -65,11 +67,22 @@ void Map::setMapSize(int x, int y)
 void Map::saveMapFile()
 {
 	fstream file;
-	file.open("MapFile.txt", ios::out | ios::trunc);
+	file.open("MapFile1.txt", ios::out | ios::trunc);
 	if (!file.good()) {
 		cout << "Blad zapisu mapy" << endl;
 	}
 	file << scale << " " << mapDimensions.x << " " << mapDimensions.y << "\n";
+	for (int i = 1; i < fieldTypesCount; i++) {
+		file << "<" << i << "> ";
+		for (auto it = fields.begin(); it != fields.end(); it++) {
+			if ((int)it->second->getType() == i) {
+				file << it->first.first << " " << it->first.second<<" ";
+			}
+		}
+	}
+	std::cout << "Map saved!\n";
+
+/*
 	if (mapDimensions.x > 0) {
 		for (int y = 0; y < mapDimensions.y; y++) {
 			for (int x = 0; x < mapDimensions.x; x++) {
@@ -79,13 +92,13 @@ void Map::saveMapFile()
 				file << "\n";
 			}
 		}
-	}
+	}*/
 }
 
 void Map::loadMapFile()
 {
 	fstream file;
-	file.open("MapFile.txt", ios::in);
+	file.open("MapFile1.txt", ios::in);
 	if (!file.good()) {
 		std::cout << "Blad wczytania mapy" << std::endl;
 	}
@@ -97,15 +110,38 @@ void Map::loadMapFile()
 
 	setMapSize(x, y);
 
-	if (x > 0 && y > 0) {
-		for (y = 0; y < mapDimensions.y; y++) {
-			for (x = 0; x < mapDimensions.x; x++) {
-				int t;
-				file >> t;
-				setField(x, y, t);
-			}
+	Field::FieldType type = Field::Empty;
+	std::string s;
+	bool isXCoord = true;
+
+	while (!file.eof()) {
+		file >> s;
+		if (s.length() > 0 && s[0] == '<' && s[s.length() - 1] == '>') {
+			type = static_cast<Field::FieldType>(std::stoi(s.substr(1, s.length() - 2)));
 		}
+		else {
+			if (isXCoord) {
+				file >> x;
+			}
+			else {
+				file >> y;
+				setField(x, y, type);
+			}
+			isXCoord = !isXCoord;
+		}
+
 	}
+	std::cout << "Map loaded!\n";
+
+	//if (x > 0 && y > 0) {
+	//	for (y = 0; y < mapDimensions.y; y++) {
+	//		for (x = 0; x < mapDimensions.x; x++) {
+	//			int t;
+	//			file >> t;
+	//			setField(x, y, t);
+	//		}
+	//	}
+	//}
 
 }
 

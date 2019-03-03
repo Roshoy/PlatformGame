@@ -35,6 +35,7 @@ protected:
 	float size;
 	bool unique;
 	bool solid;
+	
 private:
 	
 	Sprite sprite;

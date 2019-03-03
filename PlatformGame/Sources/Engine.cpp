@@ -19,16 +19,16 @@ Engine::GameState Engine::runEngine()
 {		
 	textureManager.setMapTextures(*map);
 	map->loadMapFile();
-	
+	std::cout << "Map Loaded\n";
 	spawnPlayer();
+	std::cout << "Player Spawned\n";
 	spawnEnemy();	
+	std::cout << "Enemies spawned\n";
 	collisionManager = new CollisionManager(player, enemies);
 	collisionManager->setTestString(&testString);
 	GameState gameState = On;
 
 	while (window->isOpen()) {
-		//testString = player.getPosition().x;
-		//std::cout << testString << '\n';
 		Event event;
 		if (window->pollEvent(event)) {
 			if (event.type == Event::Closed) {
@@ -112,6 +112,9 @@ void Engine::getControlsInputToPlayer()
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		direction->y = 1;
 	}
+	if (Keyboard::isKeyPressed(Keyboard::S)) {
+		map->saveMapFile();
+	}
 	player.updateSpeed(*direction);
 }
 
@@ -165,11 +168,12 @@ void Engine::spawnPlayer()
 {
 	int x = 0, y = 0;
 	player = Player();
+	std::cout << "Chyba player.spawn()\n";
 	if (!player.spawn(*map, 2, x, y))
 	{
 		std::cout << "No Player spawned!\n";
 	};
-	
+	std::cout << "Nie player.spawn()\n";
 	textureManager.setCharacterTextures(player);
 }
 
