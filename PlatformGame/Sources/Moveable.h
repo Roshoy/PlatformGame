@@ -14,19 +14,18 @@ public:
 	sf::Vector2f getPosition();
 	sf::Vector2f getMaxSpeed();
 	sf::Vector2f getSpeed();
-
+	bool isInAir() { return inAir; }
+	bool hasJumped() { return jumped; }
 	void setPosition(sf::Vector2f pos);
 
-	void updateNextPosition(Map& map);
+	virtual void updateNextPosition(sf::Vector2f newPosition);
 	void updatePosition();
 
 	void updateSpeed(sf::Vector2i & direction);
 	//void calculateNextPosition();
 	void jump();
-
-	bool loadTexture(std::string & texturesDir);
 	static unsigned int spriteCount;
-
+	bool inAir;
 protected:
 
 	void updateNextPositionX(float leftBoundary, float rightBoundary);
@@ -43,7 +42,8 @@ protected:
 	float acceleration;
 	float retardation;
 
-	bool inAir;
+	
+	bool jumped;
 	
 	void draw(RenderTarget& target, RenderStates states)const override;
 };

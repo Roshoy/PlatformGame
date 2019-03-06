@@ -8,6 +8,7 @@
 #include "TextureManager.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "MapScripts.h"
 
 using namespace sf;
 using namespace std;
@@ -18,13 +19,13 @@ public:
 	Engine(RenderWindow& win);
 	GameState runEngine();
 	void scrollMap();
-	void getControlsInputToPlayer();
+	sf::Vector2i getPlayerInput();
 	GameState playerMovement();
 	void frukMovement();
 
 
 private:
-	std::string testString;
+	MapScripts mapScripts;
 	CollisionManager* collisionManager;
 	TextureManager textureManager;
 	void spawnPlayer();
@@ -40,6 +41,6 @@ private:
 	static std::string texturesDir;
 
 	bool playerWon();
-	bool characterOnTileType(Character& character, int tileType);
+	bool characterOnTile(Character& character, int x, int y);
 
 };

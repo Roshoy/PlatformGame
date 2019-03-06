@@ -1,18 +1,20 @@
 #include "Field.h"
 
-Field::Field(float s, int xx, int yy)
+float Field::fieldSize = 32;
+float Field::textureSize = 16;
+
+Field::Field( int xx, int yy)
 {
-	size = s;
-	sprite.setPosition(Vector2f(xx*size, yy*size));
+	
+	sprite.setPosition(Vector2f(xx*fieldSize, yy*fieldSize));
+	sprite.setScale(fieldSize / textureSize, fieldSize / textureSize);
 	type = Empty;
 	unique = false;
 }
 
 void Field::init(float s, int xx, int yy, FieldType type)
-{
-	size = s;
-	sprite.setPosition(Vector2f(xx*size, yy*size));
-	this->type = type;
+{	
+	this->type = type;	
 }
 
 void Field::setPosition(Vector2f pos)
@@ -20,10 +22,9 @@ void Field::setPosition(Vector2f pos)
 	sprite.setPosition(pos);
 }
 
-void Field::setTexture(Texture* tex)
+void Field::setTexture(Texture& tex)
 {
-	if (tex == nullptr)std::cout << "Given tex array is null\n";
-	sprite.setTexture(tex[type]);
+	sprite.setTexture(tex);
 }
 
 Field::FieldType Field::getType() const
@@ -39,6 +40,11 @@ void Field::setType(FieldType newType)
 bool Field::isSolid()
 {
 	return solid;
+}
+
+void Field::setSolid(bool solid)
+{
+	this->solid = solid;
 }
 
 Vector2f Field::getPosition() const

@@ -146,8 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\Fields\PlayerSpawn.cpp" />
-    <ClCompile Include="Sources\Fields\BrickWall.cpp" />
+    <ClCompile Include="Sources\MapScripts.cpp" />
     <ClCompile Include="Sources\CollisionManager.cpp" />
     <ClCompile Include="Sources\Fruk.cpp" />
     <ClCompile Include="Sources\Moveable.cpp" />
@@ -161,10 +160,10 @@
     <ClCompile Include="Sources\Map.cpp" />
     <ClCompile Include="Sources\Menu.cpp" />
     <ClCompile Include="Sources\TextureManager.cpp" />
+    <ClCompile Include="Sources\Fields\SpawnPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\Fields\PlayerSpawn.h" />
-    <ClInclude Include="Sources\Fields\BrickWall.h" />
+    <ClInclude Include="Sources\MapScripts.h" />
     <ClInclude Include="Sources\CollisionManager.h" />
     <ClInclude Include="Sources\Fruk.h" />
     <ClInclude Include="Sources\Moveable.h" />
@@ -177,6 +176,7 @@
     <ClInclude Include="Sources\Map.h" />
     <ClInclude Include="Sources\Menu.h" />
     <ClInclude Include="Sources\TextureManager.h" />
+    <ClInclude Include="Sources\Fields\SpawnPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\FieldsSpriteSheet.png" />

@@ -9,14 +9,15 @@ Moveable::Moveable(Vector2f scale, Vector2f size)
 	body->setScale(scale);
 	nextPosition = body->getPosition();
 
-	inAir = false;
+	inAir = true;
+	jumped = false;
 
 	this->size = scale;
 	this->size.x *= size.x;
 	this->size.y *= size.y;
 
 	velocity = sf::Vector2f(0, 0);
-	maxVelocity = sf::Vector2f(10, -23);
+	maxVelocity = sf::Vector2f(10, 23);
 
 	acceleration = 2;
 	retardation = 0.5;
@@ -60,14 +61,27 @@ void Moveable::setPosition(sf::Vector2f pos)
 	nextPosition = pos;
 }
 
-void Moveable::updateNextPosition(Map& map)
+void Moveable::updateNextPosition(Vector2f newPosition)
 {
-	updateNextPositionX(map.getLeftMoveLimit(getCurrentRect()), map.getRightMoveLimit(getCurrentRect()));
-	updateNextPositionY(map.getUpMoveLimit(getCurrentRect()), map.getDownMoveLimit(getCurrentRect()));
+	if(newPosition.x != nextPosition.x)
+	{
+		velocity.x = 0;
+	}
+	if(newPosition.y != nextPosition.y){
+		velocity.y = 0;
+		if(newPosition.y<nextPosition.y && newPosition.y >= 0)
+		{
+			inAir = false;
+		}
+	}
+	nextPosition = newPosition;
 }
 
 void Moveable::updatePosition()
 {
+	cout << getCurrentRect().left + getCurrentRect().width << " " << getCurrentRect().top + getCurrentRect().height<< endl;
+	cout << velocity.x << " " << velocity.y <<endl;
+	
 	body->setPosition(nextPosition);
 }
 
@@ -128,39 +142,38 @@ void Moveable::updateSpeed(sf::Vector2i & direction)
 	if (velocity.x*direction.x > maxVelocity.x) {
 		velocity.x = maxVelocity.x*direction.x;
 	}
-	if (direction.y > 0)
+	if (velocity.x >= retardation) {
+		velocity.x -= retardation;
+	}
+	else if (velocity.x <= -retardation) {
+		velocity.x += retardation;
+	}
+	else
+	{
+		velocity.x = 0;
+	}
+	velocity.y += GRAVITATION;
+	if (velocity.y > maxVelocity.y)velocity.y = maxVelocity.y;
+	if (velocity.y < -maxVelocity.y)velocity.y = -maxVelocity.y;
+		
+	if (direction.y < 0)
 	{
 		jump();
 	}
+
+	nextPosition += velocity;
 }
 
 
 void Moveable::jump()
 {
 	if (!inAir) {
+		
 		inAir = true;
-		velocity.y = maxVelocity.y;
+		jumped = true;
+		velocity.y = -maxVelocity.y;
 	}
 }
-
-//bool Moveable::loadTexture(string & texturesDir)
-//{
-//	sf::Image* img = new sf::Image();
-//	if (!img->loadFromFile(texturesDir)) {
-//		std::cout << "Failed to load " + texturesDir + "\n";
-//		return false;
-//	}
-//	for (int i = 0; i < spriteCount; i++)
-//	{
-//		if (!texture[i].loadFromImage(*img,
-//			sf::IntRect(i * size.x, 0, size.x, size.y)))
-//		{
-//			std::cout << "Failed to read " + std::to_string(i) + ". sprite from " + texturesDir + "\n";
-//			return false;
-//		}
-//	}
-//	return true;
-//}
 
 void Moveable::draw(RenderTarget& target, RenderStates states) const
 {

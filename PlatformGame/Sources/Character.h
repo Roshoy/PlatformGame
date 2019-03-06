@@ -20,7 +20,9 @@ public:
 
 	CharacterType getCharacterType();
 
-	bool spawn(Map& map, int type, int& xInit, int& yInit);
+	void spawn(sf::Vector2f pos = sf::Vector2f(0,0));
+
+	void spawn(float x, float y);
 
 	enum SpriteState {Idle      = 0,
 					  Jump      = 1,

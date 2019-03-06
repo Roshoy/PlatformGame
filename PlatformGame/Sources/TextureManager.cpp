@@ -5,7 +5,7 @@
 TextureManager::TextureManager(std::string textureDir)
 {
 	characterTextures = new sf::Texture*[Character::characterTypesCount];
-	fieldTextures = new sf::Texture[Map::fieldTypesCount];
+	
 	texturesDir = textureDir;
 }
 
@@ -60,14 +60,18 @@ void TextureManager::loadCharacterTextures(string character, Character::Characte
 void TextureManager::loadFieldTextures()
 {
 	sf::Image* spriteSheet = new Image();
-	if(!spriteSheet->loadFromFile(texturesDir + "FieldsSpriteSheet.png"))
+	if(!spriteSheet->loadFromFile(texturesDir + "Tileset.png"))
 	{
-		std::cout << "Failed to load FieldsSpriteSheet.png\n";
+		std::cout << "Failed to load Tileset.png\n";
 	}
-	for(int i=0; i<Map::fieldTypesCount; i++)
+	int sheetWidth = spriteSheet->getSize().x/Field::textureSize;
+	int sheetHeight = spriteSheet->getSize().y / Field::textureSize;
+	fieldTextures = new sf::Texture[sheetWidth*sheetHeight];
+	for(int i=0; i<sheetWidth*sheetHeight; i++)
 	{
-		if (!fieldTextures[i].loadFromImage(*spriteSheet, sf::IntRect(i*spriteSheet->getSize().y, 0,
-			spriteSheet->getSize().y, spriteSheet->getSize().y)))
+		if (!fieldTextures[i].loadFromImage(*spriteSheet, sf::IntRect((i % sheetWidth)*(int)Field::textureSize,
+			i/sheetWidth * (int)Field::textureSize,
+			Field::textureSize, Field::textureSize)))
 		{
 			std::cout << "Field Texture load fail\n";
 		}		

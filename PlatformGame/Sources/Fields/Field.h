@@ -9,30 +9,30 @@ class Field: public Drawable, public Transformable {
 public:
 	enum FieldType
 	{
-		Empty = 0,
-		Brick = 1,
-		PlayerSpawn = 2,
-		FrukSpawn = 3,
-		Win = 4
+		Empty = 0,		
+		Spawn = 1,
+		Script = 2
 	};
 	
-	Field(float s = 0.f, int xx = 0, int yy = 0);
+	Field(int xx = 0, int yy = 0);
 
 	void init(float s = 0.f, int xx = 0, int yy = 0, FieldType type = Empty);
 
 	void setPosition(Vector2f pos);
-	void setTexture(Texture* tex);
+	void setTexture(Texture& tex);
 	FieldType getType() const;
 	void setType(FieldType newType);
-	
+	int typeT;
 	bool isSolid();
-
+	void setSolid(bool solid);
 	Vector2f getPosition() const;
 
 	bool isUnique();
+	static float fieldSize;
+	static float textureSize;
 protected:
+	
 	FieldType type;
-	float size;
 	bool unique;
 	bool solid;
 	
