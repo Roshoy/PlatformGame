@@ -9,7 +9,7 @@ class CollisionManager
 {
 public:
 	CollisionManager() = default;
-	CollisionManager(Player& player, std::list<Character>& enemies, Map& map);
+	CollisionManager(Player& player, std::list<Character*>& enemies, Map& map);
 	
 	enum CollisionResult { Nothing, ADies, BDies };
 
@@ -25,7 +25,7 @@ private:
 	sf::Vector2f approximatePositionX(Rect<float> currentRect);
 	sf::Vector2f approximatePositionY(Rect<float> currentRect);
 	Player* player;
-	std::list<Character>* enemies;
+	std::list<Character*>* enemies;
 	Map* map;
 	float getUpMoveLimit(FloatRect character, float dy);
 	float getRightMoveLimit(FloatRect character, float dx);

@@ -21,7 +21,7 @@ public:
 	virtual void updateNextPosition(sf::Vector2f newPosition);
 	void updatePosition();
 
-	void updateSpeed(sf::Vector2i & direction);
+	virtual void updateSpeed(sf::Vector2i & direction);
 	//void calculateNextPosition();
 	void jump();
 	static unsigned int spriteCount;
@@ -41,7 +41,6 @@ protected:
 	sf::Vector2f maxVelocity;
 	float acceleration;
 	float retardation;
-
 	
 	bool jumped;
 	

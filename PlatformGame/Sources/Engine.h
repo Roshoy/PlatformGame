@@ -36,7 +36,7 @@ private:
 	Map* map;
 	RenderWindow* window;
 	Player player;
-	std::list<Character> enemies;
+	std::list<Character*> enemies;
 	View* map_view;
 	static std::string texturesDir;
 

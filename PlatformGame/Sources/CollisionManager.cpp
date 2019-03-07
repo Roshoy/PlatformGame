@@ -1,7 +1,7 @@
 #include "CollisionManager.h"
 #include <valarray>
 
-CollisionManager::CollisionManager(Player& player, std::list<Character>& enemies, Map& map)
+CollisionManager::CollisionManager(Player& player, std::list<Character*>& enemies, Map& map)
 {
 	this->player = &player;
 	std::cout << &player << std::endl;
@@ -29,6 +29,7 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 		{
 			return BDies;
 		}
+		
 		return ADies;
 	}	
 	return Nothing;
@@ -36,17 +37,19 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 
 CollisionManager::CollisionResult CollisionManager::playerCollisionWithEnemies()
 {
-	for (std::list<Character>::iterator iter = enemies->begin(); iter != enemies->end(); ++iter)
+	std::list<Character*>::iterator iter = enemies->begin();
+	while(iter != enemies->end())
 	{
-		switch (collisionBetweenCharactersOutcome(*player, *iter))
+		CollisionResult b = collisionBetweenCharactersOutcome(*player, **iter);
+		switch (b)
 		{
 		case ADies:
 			return ADies;
 		case BDies:
 			enemies->erase(iter++);
-			--iter;
 			break;
 		case Nothing:
+			iter++;
 			break;
 		}
 	}

@@ -10,7 +10,7 @@ MapScripts::MapScripts()
 void MapScripts::setSpawnPoints()
 {
 	int spawnPointCount = 2;
-	int xy[] = {5,0,6,0};
+	int xy[] = {23,1,23,1};
 	Fruk enemies[] = {
 		Fruk(),
 		Fruk()

@@ -17,12 +17,12 @@ Character::CharacterType Character::getCharacterType()
 
 void Character::spawn(Vector2f pos)
 {
-	body->setPosition(pos);
+	setPosition(pos*Field::fieldSize);
 }
 
 void Character::spawn(float x, float y)
 {
-	body->setPosition(x,y);
+	setPosition(sf::Vector2f(x*Field::fieldSize,y*Field::fieldSize));
 }
 
 

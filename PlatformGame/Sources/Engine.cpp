@@ -19,7 +19,7 @@ Engine::GameState Engine::runEngine()
 	textureManager.setMapTextures(*map);
 	map->loadMapFile();
 	spawnPlayer();
-	//spawnEnemy();	
+	spawnEnemy();	
 	
 	
 	collisionManager = new CollisionManager(player, enemies, *map);
@@ -45,8 +45,8 @@ Engine::GameState Engine::runEngine()
 		window->draw(*map);
 		window->draw(player);
 		
-		for (std::list<Character>::iterator i = enemies.begin(); i != enemies.end(); ++i) {
-			window->draw(*i);
+		for (std::list<Character*>::iterator i = enemies.begin(); i != enemies.end(); ++i) {
+			window->draw(**i);
 		}
 		window->display();
 		if (gameState != On) {
@@ -138,19 +138,19 @@ Engine::GameState Engine::playerMovement()
 
 void Engine::frukMovement()
 {
-	for (std::list<Character>::iterator iter = enemies.begin(); iter != enemies.end(); ++iter) {
+	for (std::list<Character*>::iterator iter = enemies.begin(); iter != enemies.end(); ++iter) {
 		sf::Vector2i direction;
-		if (iter->getSpeed().x < 0) {
+		if ((*iter)->getSpeed().x < 0) {
 			direction.x = -1;
 		}
-		else if (iter->getSpeed().x > 0) {
+		else if ((*iter)->getSpeed().x > 0) {
 			direction.x = 1;
 		}
 		
-		iter->updateSpeed(direction);
-		sf::Vector2f newPosition = collisionManager->characterCollisionWithMap(iter->getCurrentRect(), iter->getNextRect());
-		iter->updateNextPosition(newPosition);		
-		iter->updatePosition();
+		(*iter)->updateSpeed(direction);
+		sf::Vector2f newPosition = collisionManager->characterCollisionWithMap((*iter)->getCurrentRect(), (*iter)->getNextRect());
+		(*iter)->updateNextPosition(newPosition);
+		(*iter)->updatePosition();
 	}
 }
 
@@ -168,8 +168,8 @@ void Engine::spawnEnemy()
 	{
 		Character* newEnemy = new Fruk();
 		textureManager.setCharacterTextures(*newEnemy);
-		enemies.push_back(*newEnemy);
-		enemies.back().spawn(it->first, it->second);
+		enemies.push_back(newEnemy);
+		enemies.back()->spawn(it->first, it->second);
 	}
 }
 

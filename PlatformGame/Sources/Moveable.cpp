@@ -67,9 +67,9 @@ void Moveable::updateNextPosition(Vector2f newPosition)
 	{
 		velocity.x = 0;
 	}
-	if(newPosition.y != nextPosition.y){
+	if (newPosition.y != nextPosition.y) {
 		velocity.y = 0;
-		if(newPosition.y<nextPosition.y && newPosition.y >= 0)
+		if (newPosition.y < nextPosition.y && newPosition.y >= 0)
 		{
 			inAir = false;
 		}
@@ -78,10 +78,7 @@ void Moveable::updateNextPosition(Vector2f newPosition)
 }
 
 void Moveable::updatePosition()
-{
-	cout << getCurrentRect().left + getCurrentRect().width << " " << getCurrentRect().top + getCurrentRect().height<< endl;
-	cout << velocity.x << " " << velocity.y <<endl;
-	
+{	
 	body->setPosition(nextPosition);
 }
 
