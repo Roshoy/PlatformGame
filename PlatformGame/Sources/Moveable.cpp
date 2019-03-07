@@ -10,7 +10,6 @@ Moveable::Moveable(Vector2f scale, Vector2f size)
 	nextPosition = body->getPosition();
 
 	inAir = true;
-	jumped = false;
 
 	this->size = scale;
 	this->size.x *= size.x;
@@ -82,55 +81,6 @@ void Moveable::updatePosition()
 	body->setPosition(nextPosition);
 }
 
-void Moveable::updateNextPositionX(float leftBoundary, float rightBoundary)
-{
-	if (velocity.x > 0 && nextPosition.x + size.x + velocity.x >= rightBoundary) {
-		nextPosition.x = rightBoundary - size.x;
-		velocity.x = 0;
-
-	}
-	else if (velocity.x < 0 && nextPosition.x + velocity.x <= leftBoundary) {
-		nextPosition.x = leftBoundary;
-		velocity.x = 0;
-	}
-	nextPosition.x += velocity.x;
-
-	if ((velocity.x < retardation && velocity.x > 0) || (velocity.x > -retardation && velocity.x < 0)) {
-		velocity.x = 0;
-	}
-
-	//hamowanie
-	if (velocity.x > 0) {
-		velocity.x -= retardation;
-
-	}
-	else if (velocity.x < 0) {
-		velocity.x += retardation;
-	}
-
-}
-
-void Moveable::updateNextPositionY(float upBoundary, float downBoundary)
-{
-	if (velocity.y < 0 && nextPosition.y + velocity.y <= upBoundary) {
-		nextPosition.y = upBoundary;
-		velocity.y = 0;
-	}
-
-	if (nextPosition.y + size.y + velocity.y + GRAVITATION < downBoundary) {
-		inAir = true;
-		velocity.y = velocity.y + GRAVITATION;
-	}
-	else {
-		velocity.y = 0;
-		nextPosition.y = downBoundary - size.y;
-		inAir = false;
-	}
-
-	nextPosition.y += velocity.y;
-}
-
-
 void Moveable::updateSpeed(sf::Vector2i & direction)
 {
 	if (velocity.x*direction.x < maxVelocity.x) {
@@ -153,10 +103,7 @@ void Moveable::updateSpeed(sf::Vector2i & direction)
 	if (velocity.y > maxVelocity.y)velocity.y = maxVelocity.y;
 	if (velocity.y < -maxVelocity.y)velocity.y = -maxVelocity.y;
 		
-	if (direction.y < 0)
-	{
-		jump();
-	}
+	if (direction.y < 0){ jump();}
 
 	nextPosition += velocity;
 }
@@ -164,10 +111,8 @@ void Moveable::updateSpeed(sf::Vector2i & direction)
 
 void Moveable::jump()
 {
-	if (!inAir) {
-		
+	if (!inAir) {		
 		inAir = true;
-		jumped = true;
 		velocity.y = -maxVelocity.y;
 	}
 }

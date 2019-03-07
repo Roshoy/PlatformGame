@@ -29,6 +29,9 @@ void Character::spawn(float x, float y)
 void Character::setTextures(sf::Texture * texture)
 {
 	this->texture = texture;
+	size = static_cast<Vector2f>(texture->getSize());
+	size.x *= body->getScale().x;
+	size.y *= body->getScale().y;
 }
 
 

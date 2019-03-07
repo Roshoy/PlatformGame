@@ -2,8 +2,8 @@
 
 Fruk::Fruk(Vector2f sscale, Vector2f ssize):Character(sscale, Character::Fruk, ssize)
 {
-	maxVelocity.x = 10;
-	velocity.x = 0;
+	maxVelocity.x = 5;
+	velocity.x = 2;
 	retardation = 1;
 	acceleration = 2.5;
 	cout << "Enemy spawned\n";

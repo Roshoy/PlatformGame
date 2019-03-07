@@ -54,9 +54,6 @@
     <ClCompile Include="Sources\CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Fields\SpawnPoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\MapScripts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,17 +95,11 @@
     <ClInclude Include="Sources\CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Fields\SpawnPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\MapScripts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\FieldsSpriteSheet.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Textures\FrukSpriteSheet.png">
       <Filter>Resource Files</Filter>
     </Image>

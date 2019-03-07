@@ -160,7 +160,6 @@
     <ClCompile Include="Sources\Map.cpp" />
     <ClCompile Include="Sources\Menu.cpp" />
     <ClCompile Include="Sources\TextureManager.cpp" />
-    <ClCompile Include="Sources\Fields\SpawnPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\MapScripts.h" />
@@ -176,10 +175,8 @@
     <ClInclude Include="Sources\Map.h" />
     <ClInclude Include="Sources\Menu.h" />
     <ClInclude Include="Sources\TextureManager.h" />
-    <ClInclude Include="Sources\Fields\SpawnPoint.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\FieldsSpriteSheet.png" />
     <Image Include="Textures\FrukSpriteSheet.png" />
     <Image Include="Textures\PlayerSpriteSheet.PNG" />
   </ItemGroup>
