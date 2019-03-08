@@ -25,7 +25,7 @@ Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 
 sf::FloatRect Moveable::getCurrentRect()
 {
-	return sf::FloatRect(body->getPosition().x, body->getPosition().y, size.x, size.y);
+	return sf::FloatRect(body->getPosition().x - size.x/2, body->getPosition().y - size.y/2, size.x, size.y);
 }
 
 sf::FloatRect Moveable::getNextRect()
@@ -58,11 +58,12 @@ void Moveable::setPosition(sf::Vector2f pos)
 {
 	body->setPosition(pos);
 	nextPosition = pos;
+	
 }
 
 void Moveable::updateNextPosition(sf::Vector2f newPosition)
 {
-	std::cout << "Still works\n";
+	
 	if(newPosition.x != nextPosition.x)
 	{
 		velocity.x = 0;
@@ -79,7 +80,7 @@ void Moveable::updateNextPosition(sf::Vector2f newPosition)
 
 void Moveable::updatePosition()
 {	
-	body->setPosition(nextPosition);
+	body->setPosition(nextPosition + size/2.f);
 }
 
 void Moveable::updateSpeed(sf::Vector2i & direction)

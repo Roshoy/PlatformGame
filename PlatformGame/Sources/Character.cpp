@@ -18,13 +18,12 @@ Character::CharacterType Character::getCharacterType()
 void Character::setPosition(sf::Vector2f pos)
 {
 	Moveable::setPosition(pos);
-	cout << "SETPOSITION\n";
-	
 }
 
 void Character::spawn(Vector2f pos)
 {
 	setPosition(pos*Field::fieldSize);
+	body->setOrigin(textureSize.x / 2, textureSize.y / 2);
 }
 
 void Character::updateNextPosition(sf::Vector2f newPosition)
@@ -41,7 +40,7 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 	
 	if (velocity.y > 0)
 	{
-		cout << "Vel.y: " << velocity.y << endl;
+		//cout << "Vel.y: " << velocity.y << endl;
 		setState(Fall);
 	}
 	else if (velocity.y < 0)
@@ -51,11 +50,12 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 	setNextTexture(maxVelocity.y, velocity.y);
 	body->setTexture(*nextTextureToShow);
 	if ((facingRight && velocity.x < 0) || (!facingRight && velocity.x > 0)) {
-
+		cout << "Obrot\n";
 		facingRight = !facingRight;
 		if (facingRight)body->setTextureRect(sf::Rect<int>(0, 0, textureSize.x, textureSize.y));
 		else body->setTextureRect(sf::Rect<int>(textureSize.x, 0, -textureSize.x, textureSize.y));
 	}
+	
 }
 
 void Character::spawn(float x, float y)
