@@ -15,9 +15,45 @@ Character::CharacterType Character::getCharacterType()
 	return characterType;
 }
 
+void Character::setPosition(sf::Vector2f pos)
+{
+	Moveable::setPosition(pos);
+	cout << "SETPOSITION\n";
+	
+}
+
 void Character::spawn(Vector2f pos)
 {
 	setPosition(pos*Field::fieldSize);
+}
+
+void Character::updateNextPosition(sf::Vector2f newPosition)
+{
+	Moveable::updateNextPosition(newPosition);
+	if (velocity.x != 0)
+	{
+		setState(Run);
+	}
+	else
+	{
+		setState(Idle);
+	}
+	if (velocity.y > 0)
+	{
+		setState(Fall);
+	}
+	else if (velocity.y < 0)
+	{
+		setState(Jump);
+	}
+	setNextTexture();
+	body->setTexture(*nextTextureToShow);
+	if ((facingRight && velocity.x < 0) || (!facingRight && velocity.x > 0)) {
+
+		facingRight = !facingRight;
+		if (facingRight)body->setTextureRect(sf::Rect<int>(0, 0, textureSize.x, textureSize.y));
+		else body->setTextureRect(sf::Rect<int>(textureSize.x, 0, -textureSize.x, textureSize.y));
+	}
 }
 
 void Character::spawn(float x, float y)
@@ -25,59 +61,8 @@ void Character::spawn(float x, float y)
 	setPosition(sf::Vector2f(x*Field::fieldSize,y*Field::fieldSize));
 }
 
-
-void Character::setTextures(sf::Texture * texture)
-{
-	this->texture = texture;
-	size = static_cast<Vector2f>(texture->getSize());
-	size.x *= body->getScale().x;
-	size.y *= body->getScale().y;
-}
-
-
 void Character::draw(RenderTarget& target, RenderStates states) const
 {
-	if (inAir) {
-		if (velocity.x > 0) {
-			body->setTexture(texture[JumpRight]);
-			
-		}
-		else if(velocity.x < 0){
-			body->setTexture(texture[JumpLeft]);
-			
-		}
-		else{
-			body->setTexture(texture[Jump]);
-			
-		}
-	}
-	else {
-		
-		if (velocity.x > 0) {
-			if (int(body->getPosition().x) % 100 < 50) {
-				body->setTexture(texture[Right1]);
-				//cout << "4\n";
-			}else{
-				body->setTexture(texture[Right2]);
-				
-			}
-		}
-		else if (velocity.x < 0) {
-			if (int(body->getPosition().x) % 100 < 50) {
-				body->setTexture(texture[Left1]);
-				//cout << "6\n";
-			}
-			else {
-				body->setTexture(texture[Left2]);
-				
-			}
-		}
-		else {
-			body->setTexture(texture[Idle]);
-			
-		}
-	}
-	
 	sf::Transform transform = getTransform();
 	target.draw(*body, transform);
 }

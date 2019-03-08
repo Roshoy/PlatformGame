@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\Animator.cpp" />
     <ClCompile Include="Sources\MapScripts.cpp" />
     <ClCompile Include="Sources\CollisionManager.cpp" />
     <ClCompile Include="Sources\Fruk.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Sources\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sources\Animator.h" />
     <ClInclude Include="Sources\MapScripts.h" />
     <ClInclude Include="Sources\CollisionManager.h" />
     <ClInclude Include="Sources\Fruk.h" />

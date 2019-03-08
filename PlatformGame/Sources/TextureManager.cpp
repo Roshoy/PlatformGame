@@ -4,25 +4,25 @@
 
 TextureManager::TextureManager(std::string textureDir)
 {
-	characterTextures = new sf::Texture*[Character::characterTypesCount];
-	
+	//characterTextures = new sf::Texture*[Character::characterTypesCount];
+	playerTextures = new std::map<Animator::State, std::vector<sf::Texture>>();
 	texturesDir = textureDir;
 }
 
 
 TextureManager::~TextureManager()
 {
-	for(int i=0; i<Character::characterTypesCount; i++)
+	/*for(int i=0; i<Character::characterTypesCount; i++)
 	{
 		delete[] characterTextures[i];
 	}
-	delete[] characterTextures;
+	delete[] characterTextures;*/
 	delete[] fieldTextures;
 }
 
 void TextureManager::setCharacterTextures(Character& character)
 {
-	character.setTextures(characterTextures[character.getCharacterType()]);
+	//character.setTextures(characterTextures[character.getCharacterType()]);
 }
 
 void TextureManager::setMapTextures(Map& map)
@@ -32,16 +32,20 @@ void TextureManager::setMapTextures(Map& map)
 
 void TextureManager::loadTextures()
 {
-	loadCharacterTextures("Player", Character::Player);
+	loadPlayerTextures();
 	loadCharacterTextures("Fruk", Character::Fruk);
 	loadFieldTextures();
 }
 
+std::map<Animator::State, std::vector<sf::Texture>>* TextureManager::getPlayerTextures()
+{
+	return playerTextures;
+}
+
 void TextureManager::loadCharacterTextures(string character, Character::CharacterType type)
 {
-	sf::Image* spriteSheet = new Image();
-	spriteSheet->loadFromFile(texturesDir + character +"SpriteSheet.png");
-	sf::Texture* textures = new sf::Texture[Character::spriteCount];
+	
+	/*sf::Texture* textures = new sf::Texture[Character::spriteCount];
 	
 	for(int i=0;i<Character::spriteCount;i++)
 	{
@@ -51,10 +55,44 @@ void TextureManager::loadCharacterTextures(string character, Character::Characte
 		{
 			std::cout << "Character Texture load fail\n";
 		}
-
 	}
+	
 	characterTextures[type] = textures;
-	delete spriteSheet;
+	delete spriteSheet;*/
+}
+
+void TextureManager::loadPlayerTextures()
+{
+	/*playerTextures->insert(std::make_pair(0, std::vector<sf::Texture>()));
+	playerTextures->insert(pair<int, std::vector<sf::Texture>>(1, std::vector<sf::Texture>()));
+	playerTextures->insert(pair<int, std::vector<sf::Texture>>(2, std::vector<sf::Texture>()));
+	playerTextures->insert(pair<int, std::vector<sf::Texture>>(3, std::vector<sf::Texture>()));*/
+	for (int i = 0; i < 4; i++)
+	{
+		sf::Texture tex;
+		tex.loadFromFile(texturesDir + "Player/adventurer-idle-0" + std::to_string(i) + ".png");
+		(*playerTextures)[Animator::Idle].push_back(tex);
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		sf::Texture tex;
+		tex.loadFromFile(texturesDir + "Player/adventurer-run-0" + std::to_string(i) + ".png");
+		(*playerTextures)[Animator::Run].push_back(tex);
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		sf::Texture tex;
+		tex.loadFromFile(texturesDir + "Player/adventurer-jump-0" + std::to_string(i) + ".png");
+		(*playerTextures)[Animator::Jump].push_back(tex);
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		sf::Texture tex;
+		tex.loadFromFile(texturesDir + "Player/adventurer-fall-0" + std::to_string(i) + ".png");
+		(*playerTextures)[Animator::Fall].push_back(tex);
+	}
+
+	
 }
 
 void TextureManager::loadFieldTextures()

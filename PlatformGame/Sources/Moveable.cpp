@@ -1,8 +1,8 @@
 #include "Moveable.h"
+#include "Animator.h"
+#include <iostream>
 
-unsigned int Moveable::spriteCount = 1;
-
-Moveable::Moveable(Vector2f scale, Vector2f size)
+Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 {
 	body = new sf::Sprite;
 
@@ -30,11 +30,11 @@ sf::FloatRect Moveable::getCurrentRect()
 
 sf::FloatRect Moveable::getNextRect()
 {
-	return FloatRect(nextPosition, size);
+	return sf::FloatRect(nextPosition, size);
 }
 
 
-Vector2f Moveable::getSize()
+sf::Vector2f Moveable::getSize()
 {
 	return size;
 }
@@ -60,8 +60,9 @@ void Moveable::setPosition(sf::Vector2f pos)
 	nextPosition = pos;
 }
 
-void Moveable::updateNextPosition(Vector2f newPosition)
+void Moveable::updateNextPosition(sf::Vector2f newPosition)
 {
+	std::cout << "Still works\n";
 	if(newPosition.x != nextPosition.x)
 	{
 		velocity.x = 0;
@@ -117,10 +118,8 @@ void Moveable::jump()
 	}
 }
 
-void Moveable::draw(RenderTarget& target, RenderStates states) const
+void Moveable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if(spriteCount != 0)body->setTexture(texture[0]);
-
 	sf::Transform transform = getTransform();
 	target.draw(*body, transform);
 }

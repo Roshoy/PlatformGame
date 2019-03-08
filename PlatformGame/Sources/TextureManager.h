@@ -12,12 +12,14 @@ public:
 	void setCharacterTextures(Character& character);
 	void setMapTextures(Map& map);
 	void loadTextures();
+	std::map<Animator::State, std::vector<sf::Texture>>* getPlayerTextures();
 
 private:
 	string texturesDir;
-	sf::Texture** characterTextures;
+	std::map<Animator::State, std::vector<sf::Texture>>* playerTextures;
 	sf::Texture* fieldTextures;
 	void loadCharacterTextures(string character, Character::CharacterType type);
+	void loadPlayerTextures();
 	void loadFieldTextures();
 };
 

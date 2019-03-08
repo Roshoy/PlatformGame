@@ -19,7 +19,7 @@ Engine::GameState Engine::runEngine()
 	textureManager.setMapTextures(*map);
 	map->loadMapFile();
 	spawnPlayer();
-	spawnEnemy();	
+	//spawnEnemy();	
 	
 	
 	collisionManager = new CollisionManager(player, enemies, *map);
@@ -129,7 +129,7 @@ Engine::GameState Engine::playerMovement()
 	if (gameState != On) {
 		return gameState;
 	}
-	
+	cout << "Player pos: " << player.getCurrentRect().left << " " << player.getCurrentRect().top << endl;
 	if (playerWon()) {
 		return Win;
 	}
@@ -157,8 +157,12 @@ void Engine::frukMovement()
 void Engine::spawnPlayer()
 {
 	player = Player();
+	cout << "A";
+
+	player.setTextures(*textureManager.getPlayerTextures());
 	player.spawn(sf::Vector2f(mapScripts.playerSpawnPoint.first, mapScripts.playerSpawnPoint.second));
-	textureManager.setCharacterTextures(player);
+	cout << "A";
+	cout << "A";
 }
 
 void Engine::spawnEnemy()

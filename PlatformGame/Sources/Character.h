@@ -2,13 +2,14 @@
 #include <SFML\Graphics.hpp>
 #include "Map.h"
 #include "Moveable.h"
+#include "Animator.h"
 
 #define GRAVITATION 1.5
 
 using namespace sf;
 using namespace std;
 
-class Character : public Moveable {
+class Character : public Moveable, public Animator {
 public:
 	enum CharacterType
 	{
@@ -19,21 +20,11 @@ public:
 	Character(Vector2f scale = Vector2f(0, 0),CharacterType charName = Player, Vector2f size = Vector2f(0,0));	
 
 	CharacterType getCharacterType();
-
+	virtual void setPosition(sf::Vector2f pos);
 	void spawn(sf::Vector2f pos = sf::Vector2f(0,0));
-
+	void updateNextPosition(sf::Vector2f newPosition) override;
 	void spawn(float x, float y);
 
-	enum SpriteState {Idle      = 0,
-					  Jump      = 1,
-					  JumpLeft  = 2,
-					  JumpRight = 3,
-					  Left1     = 4,
-					  Left2     = 5,
-					  Right1    = 6,
-					  Right2    = 7};
-	bool loadTexture(std::string texturesDir);
-	void setTextures(sf::Texture* texture);
 	static unsigned int spriteCount;
 	
 protected:
