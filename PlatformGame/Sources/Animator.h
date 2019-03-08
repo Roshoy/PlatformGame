@@ -13,7 +13,7 @@ public:
 	};
 
 	void setState(State newState) ;
-	void setNextTexture();
+	void setNextTexture(float vYMax, float vY);
 	void setTextures(std::map<Animator::State, std::vector<sf::Texture>>& newTextures) ;
 protected:
 	bool facingRight;
@@ -22,7 +22,10 @@ protected:
 	sf::Vector2f textureSize{ 0,0 };
 private:
 	std::map<Animator::State, std::vector<sf::Texture>> textures;
-	int textureToShow{ 0 };
+	int textureIdToShow{ 0 };
 	int framesPassed{ 0 };
+
+	void setNextTextureJump(float vYMax, float vY);
+	void setNextTextureInCycle(int speed);
 };
 

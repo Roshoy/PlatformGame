@@ -38,15 +38,17 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 	{
 		setState(Idle);
 	}
+	
 	if (velocity.y > 0)
 	{
+		cout << "Vel.y: " << velocity.y << endl;
 		setState(Fall);
 	}
 	else if (velocity.y < 0)
 	{
 		setState(Jump);
 	}
-	setNextTexture();
+	setNextTexture(maxVelocity.y, velocity.y);
 	body->setTexture(*nextTextureToShow);
 	if ((facingRight && velocity.x < 0) || (!facingRight && velocity.x > 0)) {
 
