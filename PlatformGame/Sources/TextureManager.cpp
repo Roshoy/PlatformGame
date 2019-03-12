@@ -42,10 +42,10 @@ std::map<Animator::State, std::vector<sf::Texture>>* TextureManager::getPlayerTe
 	return playerTextures;
 }
 
-void TextureManager::loadCharacterTextures(string character, Character::CharacterType type)
+void TextureManager::loadCharacterTextures(string character, int texHeight, int texWidth)
 {
 	
-	/*sf::Texture* textures = new sf::Texture[Character::spriteCount];
+	sf::Texture* textures = new sf::Texture[Character::spriteCount];
 	
 	for(int i=0;i<Character::spriteCount;i++)
 	{
@@ -58,15 +58,11 @@ void TextureManager::loadCharacterTextures(string character, Character::Characte
 	}
 	
 	characterTextures[type] = textures;
-	delete spriteSheet;*/
+	delete spriteSheet;
 }
 
 void TextureManager::loadPlayerTextures()
 {
-	/*playerTextures->insert(std::make_pair(0, std::vector<sf::Texture>()));
-	playerTextures->insert(pair<int, std::vector<sf::Texture>>(1, std::vector<sf::Texture>()));
-	playerTextures->insert(pair<int, std::vector<sf::Texture>>(2, std::vector<sf::Texture>()));
-	playerTextures->insert(pair<int, std::vector<sf::Texture>>(3, std::vector<sf::Texture>()));*/
 	for (int i = 0; i < 4; i++)
 	{
 		sf::Texture tex;

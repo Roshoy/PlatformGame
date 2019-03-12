@@ -18,7 +18,7 @@ private:
 	string texturesDir;
 	std::map<Animator::State, std::vector<sf::Texture>>* playerTextures;
 	sf::Texture* fieldTextures;
-	void loadCharacterTextures(string character, Character::CharacterType type);
+	void loadCharacterTextures(string character, int texHeight, int texWidth);
 	void loadPlayerTextures();
 	void loadFieldTextures();
 };
