@@ -16,6 +16,7 @@ public:
 	void setNextTexture(float vYMax, float vY);
 	void setTextures(std::map<Animator::State, std::vector<sf::Texture>>& newTextures) ;
 protected:
+	void setAnimationSpeed(State s, int speed);
 	bool facingRight;
 	State state;
 	sf::Texture* nextTextureToShow;

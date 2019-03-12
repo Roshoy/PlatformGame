@@ -106,10 +106,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\FrukSpriteSheet.png">
+    <Image Include="Textures\PlayerSpriteSheet.PNG">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Textures\PlayerSpriteSheet.PNG">
+    <Image Include="Textures\Fruk\FrukSpriteSheet.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

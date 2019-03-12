@@ -14,6 +14,7 @@ void Animator::setState(State newState)
 	if (state == newState)return;
 	textureIdToShow = 0;
 	state = newState;
+	framesPassed = 0;
 }
 
 void Animator::setNextTexture(float vYMax, float vY)
@@ -48,9 +49,14 @@ void Animator::setTextures(std::map<Animator::State, std::vector<sf::Texture>>& 
 
 }
 
+void Animator::setAnimationSpeed(State s, int speed)
+{
+	animationSpeeds[s] = speed;
+}
+
 void Animator::setNextTextureJump(float vYMax, float vY)
 {
-	
+	if (textures.find(Jump) == textures.end())return;
 	textureIdToShow = abs(vY) * textures[Jump].size() / (vYMax+1);
 	nextTextureToShow = &textures[Jump][textureIdToShow];
 }

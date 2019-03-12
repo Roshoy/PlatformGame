@@ -19,7 +19,7 @@ Engine::GameState Engine::runEngine()
 	textureManager.setMapTextures(*map);
 	map->loadMapFile();
 	spawnPlayer();
-	//spawnEnemy();	
+	spawnEnemy();	
 	
 	
 	collisionManager = new CollisionManager(player, enemies, *map);
@@ -168,7 +168,7 @@ void Engine::spawnEnemy()
 	for(auto it = mapScripts.frukSpawnPoints.begin();it != mapScripts.frukSpawnPoints.end(); ++it)
 	{
 		Character* newEnemy = new Fruk();
-		textureManager.setCharacterTextures(*newEnemy);
+		newEnemy->setTextures(*textureManager.getFrukTextures());
 		enemies.push_back(newEnemy);
 		enemies.back()->spawn(it->first, it->second);
 	}

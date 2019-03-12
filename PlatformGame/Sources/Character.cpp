@@ -29,6 +29,12 @@ void Character::spawn(Vector2f pos)
 void Character::updateNextPosition(sf::Vector2f newPosition)
 {
 	Moveable::updateNextPosition(newPosition);
+	updateTexture(true);
+	
+}
+
+void Character::updateTexture(bool right)
+{
 	if (velocity.x != 0)
 	{
 		setState(Run);
@@ -37,7 +43,7 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 	{
 		setState(Idle);
 	}
-	
+
 	if (velocity.y > 0)
 	{
 		//cout << "Vel.y: " << velocity.y << endl;
@@ -50,17 +56,16 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 	setNextTexture(maxVelocity.y, velocity.y);
 	body->setTexture(*nextTextureToShow);
 	if ((facingRight && velocity.x < 0) || (!facingRight && velocity.x > 0)) {
-		cout << "Obrot\n";
 		facingRight = !facingRight;
-		if (facingRight)body->setTextureRect(sf::Rect<int>(0, 0, textureSize.x, textureSize.y));
+		if (!facingRight^right)body->setTextureRect(sf::Rect<int>(0, 0, textureSize.x, textureSize.y));
 		else body->setTextureRect(sf::Rect<int>(textureSize.x, 0, -textureSize.x, textureSize.y));
 	}
-	
 }
 
 void Character::spawn(float x, float y)
 {
 	setPosition(sf::Vector2f(x*Field::fieldSize,y*Field::fieldSize));
+	body->setOrigin(textureSize.x / 2, textureSize.y / 2);
 }
 
 void Character::draw(RenderTarget& target, RenderStates states) const

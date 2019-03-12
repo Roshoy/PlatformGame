@@ -4,7 +4,7 @@ class Fruk :
 	public Character
 {
 public:
-	Fruk(Vector2f sscale = Vector2f(3.f, 3.f), Vector2f ssize = Vector2f(8.f, 10.f));
+	Fruk(Vector2f sscale = Vector2f(2.f, 2.f), Vector2f ssize = Vector2f(27.f, 14.f));
 	void updateNextPosition(Vector2f newPosition);
 };
 

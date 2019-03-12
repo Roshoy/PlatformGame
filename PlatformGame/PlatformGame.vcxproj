@@ -179,7 +179,7 @@
     <ClInclude Include="Sources\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Textures\FrukSpriteSheet.png" />
+    <Image Include="Textures\Fruk\FrukSpriteSheet.png" />
     <Image Include="Textures\PlayerSpriteSheet.PNG" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
