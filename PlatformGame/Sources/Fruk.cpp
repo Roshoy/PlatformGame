@@ -27,5 +27,6 @@ void Fruk::updateNextPosition(Vector2f newPosition)
 		}
 	}
 	nextPosition = newPosition;
+	hitbox.setPosition(getCurrentRect().left, getCurrentRect().top);
 	updateTexture(false);
 }

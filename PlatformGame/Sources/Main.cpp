@@ -6,7 +6,7 @@
 int main()
 {
 	
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1000.f, 1000.f), "Platform");
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(1000.f, 600.f), "Platform");
 	window->setFramerateLimit(60);
 
 	Game* game = new Game(*window);

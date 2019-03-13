@@ -7,6 +7,7 @@ Map::Map(int x, int y)
 {	
 	background = new RectangleShape(Vector2f(0, 0));
 	background->setFillColor(Color(100, 150, 255));	
+	//background->setFillColor(sf::Color::Black);
 
 	fieldTypesMap[Field::Empty] = &createInstance<Field>;
 	
@@ -21,7 +22,7 @@ void Map::setField(int x, int y, int type)
 	
 	fields[x][y] = new Field(x,y);
 	fields[x][y]->setSolid(isSolidTexture(type));
-	fields[x][y]->typeT=type;
+	//fields[x][y]->typeT=type;
 	fields[x][y]->setTexture(texture[type]);
 }
 
@@ -82,13 +83,10 @@ void Map::loadMapFile()
 	if (x > 0 && y > 0) {
 		for (y = 0; y < mapDimensions.y; y++) {
 			for (x = 0; x < mapDimensions.x; x++) {
-				
 				int t;
 				file >> t;
-				cout << t << " ";
 				setField(x, y, t);
 			}
-			cout << endl;
 		}
 	}
 }
@@ -143,6 +141,7 @@ void Map::draw(RenderTarget & target, RenderStates states) const
 		for (int y = 0; y < mapDimensions.y; y++) {
 			
 			if (fields[x][y] != nullptr) {
+
 				target.draw(*fields[x][y], transform);
 			}
 		}

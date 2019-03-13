@@ -12,6 +12,7 @@ public:
 	sf::Vector2f getSize();
 	sf::Vector2f getPosition();
 	sf::Vector2f getMaxSpeed();
+	sf::Vector2f getMaxAcceleration();
 	sf::Vector2f getSpeed();
 	bool isInAir() { return inAir; }
 	virtual void setPosition(sf::Vector2f pos);
@@ -25,6 +26,7 @@ protected:
 
 	sf::Sprite* body;
 	sf::Vector2f size;
+	sf::Vector2f scale;
 	bool inAir;
 	sf::Vector2f nextPosition;
 	sf::Vector2f velocity;

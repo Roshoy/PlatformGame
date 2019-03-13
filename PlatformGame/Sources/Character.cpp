@@ -8,6 +8,10 @@ unsigned int Character::characterTypesCount = 2;
 Character::Character(sf::Vector2f scale, CharacterType charName, sf::Vector2f size) :Moveable(scale, size)
 {		
 	characterType = charName;
+	hitbox.setSize(sf::Vector2f(size.x*scale.x, size.y*scale.y));
+	hitbox.setFillColor(sf::Color::Transparent);
+	hitbox.setOutlineColor(sf::Color::Red);
+	hitbox.setOutlineThickness(2);
 }
 
 Character::CharacterType Character::getCharacterType()
@@ -23,13 +27,15 @@ void Character::setPosition(sf::Vector2f pos)
 void Character::spawn(Vector2f pos)
 {
 	setPosition(pos*Field::fieldSize);
-	body->setOrigin(textureSize.x / 2, textureSize.y - size.y / 2);
+	body->setOrigin(scale.x * textureSize.x / 2, scale.y*textureSize.y - size.y / 2);
 }
 
 void Character::spawn(float x, float y)
-{
+{	
 	setPosition(sf::Vector2f(x*Field::fieldSize, y*Field::fieldSize));
-	body->setOrigin(textureSize.x / 2, textureSize.y - size.y/2);
+	body->setOrigin(textureSize.x/2 - size.x/(2*body->getScale().x) , textureSize.y-size.y/body->getScale().y - 1);
+	
+
 }
 
 
@@ -37,7 +43,7 @@ void Character::updateNextPosition(sf::Vector2f newPosition)
 {
 	Moveable::updateNextPosition(newPosition);
 	updateTexture(true);
-	
+	hitbox.setPosition(getCurrentRect().left, getCurrentRect().top);
 }
 
 void Character::updateTexture(bool right)
@@ -71,6 +77,9 @@ void Character::updateTexture(bool right)
 
 void Character::draw(RenderTarget& target, RenderStates states) const
 {
+	
 	sf::Transform transform = getTransform();
+	
 	target.draw(*body, transform);
+	target.draw(hitbox, transform);
 }

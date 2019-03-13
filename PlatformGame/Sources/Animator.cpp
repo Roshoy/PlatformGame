@@ -18,7 +18,6 @@ void Animator::setState(State newState)
 	if(animationSpeeds[newState] != 0)
 		framesPassed = FRAMES_PER_SEC/animationSpeeds[newState];
 	
-	std::cout << "Frames: " << framesPassed<<'\n';
 	state = newState;
 }
 

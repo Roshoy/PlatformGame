@@ -29,7 +29,7 @@ public:
 	static unsigned int spriteCount;
 	
 protected:
-
+	sf::RectangleShape hitbox;
 	CharacterType characterType;
 	void draw(RenderTarget& target, RenderStates states)const override;
 };

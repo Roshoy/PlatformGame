@@ -30,9 +30,8 @@ private:
 	TextureManager textureManager;
 	void spawnPlayer();
 	void spawnEnemy();
-	float screenSpeedX;
-	float screenSpeedY;
-	float maxScreenSpeed;
+	sf::Vector2f screenSpeed;
+	sf::Vector2f maxScreenSpeed;
 	Map* map;
 	RenderWindow* window;
 	Player player;

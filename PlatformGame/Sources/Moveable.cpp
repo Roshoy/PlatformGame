@@ -7,13 +7,14 @@ Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 	body = new sf::Sprite;
 
 	body->setScale(scale);
+	
 	nextPosition = body->getPosition();
 
 	inAir = true;
-
-	this->size = scale;
-	this->size.x *= size.x;
-	this->size.y *= size.y;
+	this->scale = scale;
+	this->size = size;
+	this->size.x *= scale.x;
+	this->size.y *= scale.y;
 
 	velocity = sf::Vector2f(0, 0);
 	maxVelocity = sf::Vector2f(10, 23);
@@ -25,7 +26,7 @@ Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 
 sf::FloatRect Moveable::getCurrentRect()
 {
-	return sf::FloatRect(body->getPosition().x - size.x/2, body->getPosition().y - size.y/2, size.x, size.y);
+	return sf::FloatRect(body->getPosition().x, body->getPosition().y, size.x, size.y);
 }
 
 sf::FloatRect Moveable::getNextRect()
@@ -46,7 +47,12 @@ sf::Vector2f Moveable::getPosition()
 
 sf::Vector2f Moveable::getMaxSpeed()
 {
-	return maxVelocity;
+	return sf::Vector2f(maxVelocity.x - retardation, maxVelocity.y);
+}
+
+sf::Vector2f Moveable::getMaxAcceleration()
+{
+	return sf::Vector2f(acceleration - retardation, GRAVITATION);
 }
 
 sf::Vector2f Moveable::getSpeed()
@@ -57,8 +63,7 @@ sf::Vector2f Moveable::getSpeed()
 void Moveable::setPosition(sf::Vector2f pos)
 {
 	body->setPosition(pos);
-	nextPosition = pos;
-	
+	nextPosition = pos;	
 }
 
 void Moveable::updateNextPosition(sf::Vector2f newPosition)
@@ -80,7 +85,7 @@ void Moveable::updateNextPosition(sf::Vector2f newPosition)
 
 void Moveable::updatePosition()
 {	
-	body->setPosition(nextPosition + size/2.f);
+	body->setPosition(nextPosition);
 }
 
 void Moveable::updateSpeed(sf::Vector2i & direction)

@@ -6,11 +6,12 @@ std::string Engine::texturesDir = "Textures/";
 
 Engine::Engine(sf::RenderWindow& win) {
 	window = &win;
-	map_view = new sf::View;
+	map_view = new sf::View(window->getDefaultView());
 	map = new Map();
-	screenSpeedX = 0;
-	screenSpeedY = 0;
-	maxScreenSpeed = 10;
+	screenSpeed.x = 0;
+	screenSpeed.y = 0;
+	maxScreenSpeed.x = 10;
+	maxScreenSpeed.y = 23;
 	textureManager.loadTextures();	
 }
 
@@ -61,40 +62,45 @@ Engine::GameState Engine::runEngine()
 void Engine::scrollMap()
 {
 	Vector2i MPlayerPos = window->mapCoordsToPixel(player.getPosition());
-
-	if (MPlayerPos.x + player.getSize().x > 700 && map_view->getCenter().x + window->getSize().x / 2 < 
-		map->getMapRange().x * Field::fieldSize - screenSpeedX - 1) {
-		if (maxScreenSpeed > screenSpeedX) {
-			screenSpeedX += 1.f;
+	if (MPlayerPos.x + player.getSize().x > window->getSize().x - 250 && map_view->getCenter().x + window->getSize().x / 2 < 
+		map->getMapRange().x * Field::fieldSize - screenSpeed.x - 1) {
+		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
+			screenSpeed.x += player.getMaxAcceleration().x;
 		}
-
-		map_view->move(screenSpeedX, 0);
+		else {
+			screenSpeed.x = maxScreenSpeed.x;
+		}
+		map_view->move(screenSpeed.x, 0);
 	}
-	else if (MPlayerPos.x < 300 && map_view->getCenter().x - window->getSize().x / 2 > 0 + screenSpeedX + 1) {
-		if (maxScreenSpeed > screenSpeedX) {
-			screenSpeedX += 1.f;
+	else if (MPlayerPos.x < 250 && map_view->getCenter().x - window->getSize().x / 2 > 0 + screenSpeed.x + 1) {
+		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
+			screenSpeed.x += player.getMaxAcceleration().x;
 		}
-		map_view->move(-screenSpeedX, 0);
+		else {
+			screenSpeed.x = maxScreenSpeed.x;
+		}
+		map_view->move(-screenSpeed.x, 0);
 	}
 	else {
-		screenSpeedX = 0;
+		screenSpeed.x= 0;
 	}
 
-	if (MPlayerPos.y > 800 && map_view->getCenter().y + window->getSize().y / 2 < map->getMapRange().y * Field::fieldSize - screenSpeedY - 1) {
-		if (maxScreenSpeed > screenSpeedY) {
-			screenSpeedY += 1.f;
+	if (MPlayerPos.y > window->getSize().y - 250 && map_view->getCenter().y + window->getSize().y / 2 <
+		map->getMapRange().y * Field::fieldSize - screenSpeed.y - 1) {
+		if (maxScreenSpeed.y > screenSpeed.y) {
+			screenSpeed.y += player.getMaxAcceleration().y;
 		}
-
-		map_view->move(0, screenSpeedY);
+		map_view->move(0, screenSpeed.y);
 	}
-	else if (MPlayerPos.y < 200 && map_view->getCenter().y - window->getSize().y / 2 > 0 + screenSpeedY + 1) {
-		if (maxScreenSpeed > screenSpeedY) {
-			screenSpeedY += 1.f;
+	else if (MPlayerPos.y < 100 &&
+		map_view->getCenter().y - window->getSize().y / 2 > 0 + screenSpeed.y + 1) {
+		if (maxScreenSpeed.y > screenSpeed.y) {
+			screenSpeed.y += player.getMaxAcceleration().y;
 		}
-		map_view->move(0, -screenSpeedY);
+		map_view->move(0, -screenSpeed.y);
 	}
 	else {
-		screenSpeedY = 0;
+		screenSpeed.y = 0;
 	}
 }
 
@@ -158,8 +164,10 @@ void Engine::spawnPlayer()
 {
 	player = Player();
 	player.setTextures(*textureManager.getPlayerTextures());
-	player.spawn(sf::Vector2f(mapScripts.playerSpawnPoint.first, mapScripts.playerSpawnPoint.second));
 
+	player.spawn(mapScripts.playerSpawnPoint.first, mapScripts.playerSpawnPoint.second);
+	maxScreenSpeed.x = player.getMaxSpeed().x;
+	maxScreenSpeed.y = player.getMaxSpeed().y;
 }
 
 void Engine::spawnEnemy()
