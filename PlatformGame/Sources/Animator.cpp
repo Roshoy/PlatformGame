@@ -1,6 +1,8 @@
 #include "Animator.h"
 #include <iostream>
 
+int Animator::FRAMES_PER_SEC = 360;
+
 Animator::Animator()
 {
 	animationSpeeds.insert(std::make_pair(Idle, 50));
@@ -13,8 +15,11 @@ void Animator::setState(State newState)
 {
 	if (state == newState)return;
 	textureIdToShow = 0;
+	if(animationSpeeds[newState] != 0)
+		framesPassed = FRAMES_PER_SEC/animationSpeeds[newState];
+	
+	std::cout << "Frames: " << framesPassed<<'\n';
 	state = newState;
-	framesPassed = 0;
 }
 
 void Animator::setNextTexture(float vYMax, float vY)
@@ -63,7 +68,7 @@ void Animator::setNextTextureJump(float vYMax, float vY)
 
 void Animator::setNextTextureInCycle()
 {
-	if(framesPassed >= 360 / animationSpeeds[state])
+	if(framesPassed >= FRAMES_PER_SEC / animationSpeeds[state])
 	{
 		textureIdToShow = (textureIdToShow + 1) % textures[state].size();
 		nextTextureToShow = &textures[state][textureIdToShow];

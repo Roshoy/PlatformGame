@@ -23,6 +23,7 @@ protected:
 	sf::Vector2f textureSize{ 0,0 };
 	std::map<State, int> animationSpeeds;
 private:
+	static int FRAMES_PER_SEC;
 	std::map<Animator::State, std::vector<sf::Texture>> textures;
 	int textureIdToShow{ 0 };
 	int framesPassed{ 0 };
