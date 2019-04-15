@@ -25,6 +25,9 @@ Map is implemented as tile map and consists of:
 5. More enemies
 ## Prerequisites
 Visual Studio 2017
-
+## Used assets and libraries
+1. SFML 2.5.2 for graphics
+2. Animated Pixel Adventurer, author: [rvros](https://rvros.itch.io/)
+3. Free Pixelart Platformer Tileset, author: [aamatniekss](https://aamatniekss.itch.io)
 
 
