@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,7 +147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sources\Animator.cpp" />
-    <ClCompile Include="Sources\MapScripts.cpp" />
     <ClCompile Include="Sources\CollisionManager.cpp" />
     <ClCompile Include="Sources\Fruk.cpp" />
     <ClCompile Include="Sources\Moveable.cpp" />
@@ -164,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\Animator.h" />
-    <ClInclude Include="Sources\MapScripts.h" />
     <ClInclude Include="Sources\CollisionManager.h" />
     <ClInclude Include="Sources\Fruk.h" />
     <ClInclude Include="Sources\Moveable.h" />

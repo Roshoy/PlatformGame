@@ -20,8 +20,7 @@ Engine::GameState Engine::runEngine()
 	textureManager.setMapTextures(*map);
 	map->loadMapFile();
 	spawnPlayer();
-	spawnEnemy();	
-	
+	spawnEnemy();		
 	
 	collisionManager = new CollisionManager(player, enemies, *map);
 
@@ -182,15 +181,22 @@ void Engine::spawnEnemy()
 	}
 }
 
-bool Engine::playerWon()
+Engine::GameState Engine::activateFieldsUnderCharacter(Character& character)
 {
-	for(auto it = mapScripts.winningPoints.begin(); it != mapScripts.winningPoints.end(); ++it)
+	sf::Rect<float> characterRect = character.getCurrentRect();
+	for(int x = characterRect.left/Field::fieldSize; x<characterRect.width/Field::fieldSize; x++)
 	{
-		if (characterOnTile(player, it->first, it->second))
-		{
-			return true;
+		for (int y = characterRect.top / Field::fieldSize; y < characterRect.height / Field::fieldSize; y++)
+		{		
+			
+		
 		}
 	}
+}
+
+bool Engine::playerWon()
+{
+	
 	return false;
 }
 

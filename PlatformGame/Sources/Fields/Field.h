@@ -20,9 +20,9 @@ public:
 
 	void setPosition(Vector2f pos);
 	void setTexture(Texture& tex);
-	FieldType getType() const;
-	void setType(FieldType newType);
-	int typeT;
+	int getType() const;
+	void setType(int newType);
+	int typeT; //texture type TODO: this type defines field
 	bool isSolid();
 	void setSolid(bool solid);
 	Vector2f getPosition() const;
@@ -37,7 +37,7 @@ protected:
 	bool solid;
 	
 private:
-	
+	bool scripted;
 	Sprite sprite;
 	virtual void draw(RenderTarget &target, RenderStates states)const;
 };

@@ -3,13 +3,10 @@
 float Field::fieldSize = 32;
 float Field::textureSize = 16;
 
-Field::Field( int xx, int yy)
+Field::Field( int xx, int yy):type(Empty), unique(false), typeT(0), scripted(false)
 {
-	
 	sprite.setPosition(Vector2f(xx*fieldSize, yy*fieldSize));
 	sprite.setScale(fieldSize / textureSize, fieldSize / textureSize);
-	type = Empty;
-	unique = false;
 }
 
 void Field::init(float s, int xx, int yy, FieldType type)
@@ -27,14 +24,14 @@ void Field::setTexture(Texture& tex)
 	sprite.setTexture(tex);
 }
 
-Field::FieldType Field::getType() const
+int Field::getType() const
 {
-	return type;
+	return typeT;
 }
 
-void Field::setType(FieldType newType)
+void Field::setType(int newType)
 {
-	type = newType;
+	typeT = newType;
 }
 
 bool Field::isSolid()

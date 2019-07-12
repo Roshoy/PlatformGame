@@ -17,7 +17,7 @@ void Animator::setState(State newState)
 	textureIdToShow = 0;
 	if(animationSpeeds[newState] != 0)
 		framesPassed = FRAMES_PER_SEC/animationSpeeds[newState];
-	
+	std::cout << "New state, was: "<<state<<" is: "<<newState<<std::endl;
 	state = newState;
 }
 

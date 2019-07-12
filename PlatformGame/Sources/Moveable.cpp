@@ -29,33 +29,33 @@ sf::FloatRect Moveable::getCurrentRect()
 	return sf::FloatRect(body->getPosition().x, body->getPosition().y, size.x, size.y);
 }
 
-sf::FloatRect Moveable::getNextRect()
+sf::FloatRect Moveable::getNextRect() const
 {
 	return sf::FloatRect(nextPosition, size);
 }
 
 
-sf::Vector2f Moveable::getSize()
+sf::Vector2f Moveable::getSize() const
 {
 	return size;
 }
 
-sf::Vector2f Moveable::getPosition()
+sf::Vector2f Moveable::getPosition() const
 {
 	return body->getPosition();
 }
 
-sf::Vector2f Moveable::getMaxSpeed()
+sf::Vector2f Moveable::getMaxSpeed() const
 {
 	return sf::Vector2f(maxVelocity.x - retardation, maxVelocity.y);
 }
 
-sf::Vector2f Moveable::getMaxAcceleration()
+sf::Vector2f Moveable::getMaxAcceleration() const 
 {
 	return sf::Vector2f(acceleration - retardation, GRAVITATION);
 }
 
-sf::Vector2f Moveable::getSpeed()
+sf::Vector2f Moveable::getSpeed() const
 {
 	return velocity;
 }

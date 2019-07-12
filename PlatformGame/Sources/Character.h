@@ -6,7 +6,6 @@
 
 #define GRAVITATION 1.5
 
-using namespace sf;
 using namespace std;
 
 class Character : public Moveable, public Animator {
@@ -17,12 +16,12 @@ public:
 		Fruk = 1
 	};
 	static unsigned int characterTypesCount;
-	Character(Vector2f scale = Vector2f(0, 0),CharacterType charName = Player, Vector2f size = Vector2f(0,0));	
+	Character(const sf::Vector2f& scale = sf::Vector2f(0, 0),CharacterType charName = Player, const sf::Vector2f& size = sf::Vector2f(0,0));	
 
 	CharacterType getCharacterType();
-	virtual void setPosition(sf::Vector2f pos);
-	void spawn(sf::Vector2f pos = sf::Vector2f(0,0));
-	void updateNextPosition(sf::Vector2f newPosition) override;
+	virtual void setPosition(const sf::Vector2f& pos);
+	void spawn(const sf::Vector2f& pos = sf::Vector2f(0,0));
+	void updateNextPosition(const sf::Vector2f& newPosition) override;
 	void updateTexture(bool right);
 	void spawn(float x, float y);
 

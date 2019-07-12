@@ -8,7 +8,6 @@
 #include "TextureManager.h"
 #include "CollisionManager.h"
 #include "Player.h"
-#include "MapScripts.h"
 
 using namespace sf;
 using namespace std;
@@ -25,7 +24,6 @@ public:
 
 
 private:
-	MapScripts mapScripts;
 	CollisionManager* collisionManager;
 	TextureManager textureManager;
 	void spawnPlayer();
@@ -39,6 +37,7 @@ private:
 	View* map_view;
 	static std::string texturesDir;
 
+	Engine::GameState activateFieldsUnderCharacter(Character& character);
 	bool playerWon();
 	bool characterOnTile(Character& character, int x, int y);
 

@@ -1,23 +1,14 @@
 #include "CollisionManager.h"
 #include <valarray>
 
-CollisionManager::CollisionManager(Player& player, std::list<Character*>& enemies, Map& map)
-{
-	this->player = &player;
-	std::cout << &player << std::endl;
-	std::cout << &this->player << std::endl;
-	this->enemies = &enemies;
-	this->map = &map;
-}
-
-bool CollisionManager::collisionWillBeBetweenCharacters(Character & objA, Character & objB)
+bool CollisionManager::collisionWillBeBetweenCharacters(const Character & objA, const Character & objB)
 {
 	sf::FloatRect objARect = objA.getNextRect();
 	sf::FloatRect objBRect = objB.getNextRect();
 	return objARect.intersects(objBRect);
 }
 
-CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOutcome(Character & objA, Character & objB)
+CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOutcome(const Character& objA, const Character& objB)
 {
 	if(!collisionWillBeBetweenCharacters(objA,objB))
 	{
