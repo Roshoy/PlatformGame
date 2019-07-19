@@ -28,10 +28,10 @@ private:
 	Player player;
 	std::list<Character> enemies;
 	Map map;
-	float getUpMoveLimit(const sf::FloatRect& character, float dy);
-	float getRightMoveLimit(const sf::FloatRect& character, float dx);
-	float getDownMoveLimit(const sf::FloatRect& character, float dy);
-	float getLeftMoveLimit(const sf::FloatRect& character, float dx);
+	float getUpMoveLimit(const sf::FloatRect& character, float dy) const;
+	float getRightMoveLimit(const sf::FloatRect& character, float dx) const;
+	float getDownMoveLimit(const sf::FloatRect& character, float dy) const;
+	float getLeftMoveLimit(const sf::FloatRect& character, float dx) const;
 
 };
 

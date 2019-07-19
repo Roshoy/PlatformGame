@@ -18,7 +18,7 @@ public:
 	static unsigned int characterTypesCount;
 	Character(const sf::Vector2f& scale = sf::Vector2f(0, 0),CharacterType charName = Player, const sf::Vector2f& size = sf::Vector2f(0,0));	
 
-	CharacterType getCharacterType();
+	CharacterType getCharacterType() const;
 	virtual void setPosition(const sf::Vector2f& pos);
 	void spawn(const sf::Vector2f& pos = sf::Vector2f(0,0));
 	void updateNextPosition(const sf::Vector2f& newPosition) override;

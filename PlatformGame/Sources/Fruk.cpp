@@ -1,6 +1,6 @@
 #include "Fruk.h"
 
-Fruk::Fruk(Vector2f sscale, Vector2f ssize):Character(sscale, Character::Fruk, ssize)
+Fruk::Fruk(const sf::Vector2f& sscale, const sf::Vector2f& ssize):Character(sscale, Character::Fruk, ssize)
 {
 	maxVelocity.x = 3;
 	velocity.x = 2;
@@ -11,7 +11,7 @@ Fruk::Fruk(Vector2f sscale, Vector2f ssize):Character(sscale, Character::Fruk, s
 	cout << "Enemy spawned\n";
 }
 
-void Fruk::updateNextPosition(Vector2f newPosition)
+void Fruk::updateNextPosition(const sf::Vector2f& newPosition)
 {
 	//cout << "x: " << getCurrentRect().left << " y: " << getCurrentRect().top << endl;
 	if (newPosition.x != nextPosition.x)

@@ -17,10 +17,10 @@ public:
 	bool isInAir() const { return inAir; }
 	virtual void setPosition(sf::Vector2f pos);
 
-	virtual void updateNextPosition(sf::Vector2f newPosition);
+	virtual void updateNextPosition(const sf::Vector2f& newPosition);
 	void updatePosition();
 
-	virtual void updateSpeed(sf::Vector2i & direction);
+	virtual void updateSpeed(const sf::Vector2i& direction);
 	void jump();
 protected:
 

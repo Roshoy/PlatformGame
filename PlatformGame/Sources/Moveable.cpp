@@ -4,11 +4,11 @@
 
 Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 {
-	body = new sf::Sprite;
+	body = sf::Sprite();
 
-	body->setScale(scale);
+	body.setScale(scale);
 	
-	nextPosition = body->getPosition();
+	nextPosition = body.getPosition();
 
 	inAir = true;
 	this->scale = scale;
@@ -24,9 +24,9 @@ Moveable::Moveable(sf::Vector2f scale, sf::Vector2f size)
 }
 
 
-sf::FloatRect Moveable::getCurrentRect()
+sf::FloatRect Moveable::getCurrentRect() const
 {
-	return sf::FloatRect(body->getPosition().x, body->getPosition().y, size.x, size.y);
+	return sf::FloatRect(body.getPosition().x, body.getPosition().y, size.x, size.y);
 }
 
 sf::FloatRect Moveable::getNextRect() const
@@ -42,7 +42,7 @@ sf::Vector2f Moveable::getSize() const
 
 sf::Vector2f Moveable::getPosition() const
 {
-	return body->getPosition();
+	return body.getPosition();
 }
 
 sf::Vector2f Moveable::getMaxSpeed() const
@@ -62,11 +62,11 @@ sf::Vector2f Moveable::getSpeed() const
 
 void Moveable::setPosition(sf::Vector2f pos)
 {
-	body->setPosition(pos);
+	body.setPosition(pos);
 	nextPosition = pos;	
 }
 
-void Moveable::updateNextPosition(sf::Vector2f newPosition)
+void Moveable::updateNextPosition(const sf::Vector2f& newPosition)
 {
 	
 	if(newPosition.x != nextPosition.x)
@@ -85,10 +85,10 @@ void Moveable::updateNextPosition(sf::Vector2f newPosition)
 
 void Moveable::updatePosition()
 {	
-	body->setPosition(nextPosition);
+	body.setPosition(nextPosition);
 }
 
-void Moveable::updateSpeed(sf::Vector2i & direction)
+void Moveable::updateSpeed(const sf::Vector2i & direction)
 {
 	if (velocity.x*direction.x < maxVelocity.x) {
 		velocity.x += acceleration * direction.x;
@@ -110,7 +110,7 @@ void Moveable::updateSpeed(sf::Vector2i & direction)
 	if (velocity.y > maxVelocity.y)velocity.y = maxVelocity.y;
 	if (velocity.y < -maxVelocity.y)velocity.y = -maxVelocity.y;
 		
-	if (direction.y < 0){ jump();}
+	if (direction.y < 0) jump();
 
 	nextPosition += velocity;
 }
@@ -127,5 +127,5 @@ void Moveable::jump()
 void Moveable::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::Transform transform = getTransform();
-	target.draw(*body, transform);
+	target.draw(body, transform);
 }

@@ -1,27 +1,14 @@
 #include "TextureManager.h"
 
-
-
-TextureManager::TextureManager(std::string textureDir)
+TextureManager::TextureManager(const std::string& textureDir)
 {
 	//characterTextures = new sf::Texture*[Character::characterTypesCount];
-	playerTextures = new std::map<Animator::State, std::vector<sf::Texture>>();
-	frukTextures = new std::map<Animator::State, std::vector<sf::Texture>>();
+	playerTextures = std::map<Animator::State, std::vector<sf::Texture>>();
+	frukTextures = std::map<Animator::State, std::vector<sf::Texture>>();
 	texturesDir = textureDir;
 }
 
-
-TextureManager::~TextureManager()
-{
-	/*for(int i=0; i<Character::characterTypesCount; i++)
-	{
-		delete[] characterTextures[i];
-	}
-	delete[] characterTextures;*/
-	delete[] fieldTextures;
-}
-
-void TextureManager::setCharacterTextures(Character& character)
+void TextureManager::setCharacterTextures(const Character& character)
 {
 	//character.setTextures(characterTextures[character.getCharacterType()]);
 }
@@ -39,17 +26,17 @@ void TextureManager::loadTextures()
 	loadFieldTextures();
 }
 
-std::map<Animator::State, std::vector<sf::Texture>>* TextureManager::getPlayerTextures()
+std::map<Animator::State, std::vector<sf::Texture>> TextureManager::getPlayerTextures() const
 {
 	return playerTextures;
 }
 
-std::map<Animator::State, std::vector<sf::Texture>>* TextureManager::getFrukTextures()
+std::map<Animator::State, std::vector<sf::Texture>> TextureManager::getFrukTextures() const
 {
 	return frukTextures;
 }
 
-void TextureManager::loadCharacterTextures(string character, int texHeight, int texWidth)
+void TextureManager::loadCharacterTextures(const std::string& character, int texHeight, int texWidth)
 {
 	/*
 	sf::Texture* textures = new sf::Texture[Character::spriteCount];
@@ -75,19 +62,19 @@ void TextureManager::loadFrukTextures()
 	{
 		sf::Texture tex;
 		if(!tex.loadFromFile(texturesDir + "Fruk/slime-idle-" + std::to_string(i) + ".png"))cout<<"FUCKED\n";
-		(*frukTextures)[Animator::Idle].push_back(tex);
+		frukTextures[Animator::Idle].push_back(tex);
 	}
 	for (int i = 0; i < 4; i++)
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Fruk/slime-move-" + std::to_string(i) + ".png");
-		(*frukTextures)[Animator::Run].push_back(tex);
+		frukTextures[Animator::Run].push_back(tex);
 	}
 	for (int i = 0; i < 4; i++)
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Fruk/slime-idle-" + std::to_string(i) + ".png");
-		(*frukTextures)[Animator::Fall].push_back(tex);
+		(frukTextures)[Animator::Fall].push_back(tex);
 	}
 }
 
@@ -97,25 +84,25 @@ void TextureManager::loadPlayerTextures()
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Player/adventurer-idle-0" + std::to_string(i) + ".png");
-		(*playerTextures)[Animator::Idle].push_back(tex);
+		(playerTextures)[Animator::Idle].push_back(tex);
 	}
 	for (int i = 0; i < 6; i++)
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Player/adventurer-run-0" + std::to_string(i) + ".png");
-		(*playerTextures)[Animator::Run].push_back(tex);
+		(playerTextures)[Animator::Run].push_back(tex);
 	}
 	for (int i = 0; i < 4; i++)
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Player/adventurer-jump-0" + std::to_string(i) + ".png");
-		(*playerTextures)[Animator::Jump].push_back(tex);
+		(playerTextures)[Animator::Jump].push_back(tex);
 	}
 	for (int i = 0; i < 2; i++)
 	{
 		sf::Texture tex;
 		tex.loadFromFile(texturesDir + "Player/adventurer-fall-0" + std::to_string(i) + ".png");
-		(*playerTextures)[Animator::Fall].push_back(tex);
+		(playerTextures)[Animator::Fall].push_back(tex);
 	}
 
 	
@@ -123,25 +110,23 @@ void TextureManager::loadPlayerTextures()
 
 void TextureManager::loadFieldTextures()
 {
-	sf::Image* spriteSheet = new Image();
-	if(!spriteSheet->loadFromFile(texturesDir + "Tileset.png"))
+	sf::Image spriteSheet = Image();
+	if(!spriteSheet.loadFromFile(texturesDir + "Tileset.png"))
 	{
 		std::cout << "Failed to load Tileset.png\n";
 	}
-	int sheetWidth = spriteSheet->getSize().x/Field::textureSize;
-	int sheetHeight = spriteSheet->getSize().y / Field::textureSize;
-	fieldTextures = new sf::Texture[sheetWidth*sheetHeight];
+	int sheetWidth = spriteSheet.getSize().x/Field::textureSize;
+	int sheetHeight = spriteSheet.getSize().y / Field::textureSize;
 	for(int i=0; i<sheetWidth*sheetHeight; i++)
 	{
-		if (!fieldTextures[i].loadFromImage(*spriteSheet, sf::IntRect((i % sheetWidth)*(int)Field::textureSize,
-			i/sheetWidth * (int)Field::textureSize,
-			Field::textureSize, Field::textureSize)))
+		fieldTextures.push_back(sf::Texture());
+		if (!fieldTextures[i].loadFromImage(spriteSheet, sf::IntRect((i % sheetWidth)*(int)Field::textureSize,
+			i/sheetWidth * (int)Field::textureSize, Field::textureSize, Field::textureSize)))
 		{
-			std::cout << "Field Texture load fail\n";
+			std::cout << "Field Texture load fail on "<<i<<" texture\n";
 		}		
 	}
 
-	delete spriteSheet;
 }
 
 

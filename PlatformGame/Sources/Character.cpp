@@ -14,7 +14,7 @@ Character::Character(const sf::Vector2f& scale, CharacterType charName, const sf
 	hitbox.setOutlineThickness(2);
 }
 
-Character::CharacterType Character::getCharacterType()
+Character::CharacterType Character::getCharacterType() const
 {
 	return characterType;
 }

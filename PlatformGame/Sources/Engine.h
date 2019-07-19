@@ -24,17 +24,17 @@ public:
 
 
 private:
-	CollisionManager* collisionManager;
+	CollisionManager collisionManager;
 	TextureManager textureManager;
 	void spawnPlayer();
 	void spawnEnemy();
 	sf::Vector2f screenSpeed;
 	sf::Vector2f maxScreenSpeed;
-	Map* map;
+	Map map;
 	RenderWindow* window;
 	Player player;
-	std::list<Character*> enemies;
-	View* map_view;
+	std::list<Character> enemies;
+	View map_view;
 	static std::string texturesDir;
 
 	Engine::GameState activateFieldsUnderCharacter(Character& character);

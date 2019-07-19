@@ -6,8 +6,8 @@ std::string Engine::texturesDir = "Textures/";
 
 Engine::Engine(sf::RenderWindow& win) {
 	window = &win;
-	map_view = new sf::View(window->getDefaultView());
-	map = new Map();
+	map_view = sf::View(window->getDefaultView());
+	map = Map();
 	screenSpeed.x = 0;
 	screenSpeed.y = 0;
 	maxScreenSpeed.x = 10;
@@ -17,12 +17,12 @@ Engine::Engine(sf::RenderWindow& win) {
 
 Engine::GameState Engine::runEngine()
 {		
-	textureManager.setMapTextures(*map);
-	map->loadMapFile();
+	textureManager.setMapTextures(map);
+	map.loadMapFile();
 	spawnPlayer();
 	spawnEnemy();		
 	
-	collisionManager = new CollisionManager(player, enemies, *map);
+	collisionManager = CollisionManager(player, enemies, map);
 
 	GameState gameState = On;
 
@@ -40,13 +40,13 @@ Engine::GameState Engine::runEngine()
 		
 		scrollMap();
 		
-		window->setView(*map_view);
+		window->setView(map_view);
 		window->clear();
-		window->draw(*map);
+		window->draw(map);
 		window->draw(player);
 		
-		for (std::list<Character*>::iterator i = enemies.begin(); i != enemies.end(); ++i) {
-			window->draw(**i);
+		for (const auto& enemy: enemies) {
+			window->draw(enemy);
 		}
 		window->display();
 		if (gameState != On) {
@@ -61,42 +61,42 @@ Engine::GameState Engine::runEngine()
 void Engine::scrollMap()
 {
 	Vector2i MPlayerPos = window->mapCoordsToPixel(player.getPosition());
-	if (MPlayerPos.x + player.getSize().x > window->getSize().x - 250 && map_view->getCenter().x + window->getSize().x / 2 < 
-		map->getMapRange().x * Field::fieldSize - screenSpeed.x - 1) {
+	if (MPlayerPos.x + player.getSize().x > window->getSize().x - 250 && map_view.getCenter().x + window->getSize().x / 2 < 
+		map.getMapRange().x * Field::fieldSize - screenSpeed.x - 1) {
 		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
 			screenSpeed.x += player.getMaxAcceleration().x;
 		}
 		else {
 			screenSpeed.x = maxScreenSpeed.x;
 		}
-		map_view->move(screenSpeed.x, 0);
+		map_view.move(screenSpeed.x, 0);
 	}
-	else if (MPlayerPos.x < 250 && map_view->getCenter().x - window->getSize().x / 2 > 0 + screenSpeed.x + 1) {
+	else if (MPlayerPos.x < 250 && map_view.getCenter().x - window->getSize().x / 2 > 0 + screenSpeed.x + 1) {
 		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
 			screenSpeed.x += player.getMaxAcceleration().x;
 		}
 		else {
 			screenSpeed.x = maxScreenSpeed.x;
 		}
-		map_view->move(-screenSpeed.x, 0);
+		map_view.move(-screenSpeed.x, 0);
 	}
 	else {
 		screenSpeed.x= 0;
 	}
 
-	if (MPlayerPos.y > window->getSize().y - 250 && map_view->getCenter().y + window->getSize().y / 2 <
-		map->getMapRange().y * Field::fieldSize - screenSpeed.y - 1) {
+	if (MPlayerPos.y > window->getSize().y - 250 && map_view.getCenter().y + window->getSize().y / 2 <
+		map.getMapRange().y * Field::fieldSize - screenSpeed.y - 1) {
 		if (maxScreenSpeed.y > screenSpeed.y) {
 			screenSpeed.y += player.getMaxAcceleration().y;
 		}
-		map_view->move(0, screenSpeed.y);
+		map_view.move(0, screenSpeed.y);
 	}
 	else if (MPlayerPos.y < 100 &&
-		map_view->getCenter().y - window->getSize().y / 2 > 0 + screenSpeed.y + 1) {
+		map_view.getCenter().y - window->getSize().y / 2 > 0 + screenSpeed.y + 1) {
 		if (maxScreenSpeed.y > screenSpeed.y) {
 			screenSpeed.y += player.getMaxAcceleration().y;
 		}
-		map_view->move(0, -screenSpeed.y);
+		map_view.move(0, -screenSpeed.y);
 	}
 	else {
 		screenSpeed.y = 0;
@@ -105,29 +105,29 @@ void Engine::scrollMap()
 
 sf::Vector2i Engine::getPlayerInput() 
 {
-	sf::Vector2i* direction = new sf::Vector2i(0,0);
+	auto direction = sf::Vector2i(0,0);
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
-		direction->x = -1;
+		direction.x = -1;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right)) {
-		direction->x = 1;
+		direction.x = 1;
 	}	
 	if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		direction->y = -1;
+		direction.y = -1;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		map->saveMapFile();
+		map.saveMapFile();
 	}
-	return *direction;
+	return direction;
 }
 
 Engine::GameState Engine::playerMovement()
 {	
 	player.updateSpeed(getPlayerInput());
 	player.updateNextPosition(
-		collisionManager->characterCollisionWithMap(
+		collisionManager.characterCollisionWithMap(
 			player.getCurrentRect(), player.getNextRect()));
-	CollisionManager::CollisionResult res = collisionManager->playerCollisionWithEnemies();
+	CollisionManager::CollisionResult res = collisionManager.playerCollisionWithEnemies();
 	GameState gameState = On;
 	if (res == CollisionManager::ADies)gameState = Lose;
 	player.updatePosition();
@@ -143,28 +143,28 @@ Engine::GameState Engine::playerMovement()
 
 void Engine::frukMovement()
 {
-	for (std::list<Character*>::iterator iter = enemies.begin(); iter != enemies.end(); ++iter) {
+	for (auto& enemy : enemies) {
 		sf::Vector2i direction;
-		if ((*iter)->getSpeed().x < 0) {
+		if (enemy.getSpeed().x < 0) {
 			direction.x = -1;
 		}
-		else if ((*iter)->getSpeed().x > 0) {
+		else if (enemy.getSpeed().x > 0) {
 			direction.x = 1;
 		}
 		
-		(*iter)->updateSpeed(direction);
-		sf::Vector2f newPosition = collisionManager->characterCollisionWithMap((*iter)->getCurrentRect(), (*iter)->getNextRect());
-		(*iter)->updateNextPosition(newPosition);
-		(*iter)->updatePosition();
+		enemy.updateSpeed(direction);
+		sf::Vector2f newPosition = collisionManager.characterCollisionWithMap(enemy.getCurrentRect(), enemy.getNextRect());
+		enemy.updateNextPosition(newPosition);
+		enemy.updatePosition();
 	}
 }
 
 void Engine::spawnPlayer()
 {
 	player = Player();
-	player.setTextures(*textureManager.getPlayerTextures());
+	player.setTextures(textureManager.getPlayerTextures());
 
-	player.spawn(mapScripts.playerSpawnPoint.first, mapScripts.playerSpawnPoint.second);
+	player.spawn(map.GetSpawnPoints(Character::CharacterType::Player)[0].x, map.GetSpawnPoints(Character::CharacterType::Player)[0].y);
 	maxScreenSpeed.x = player.getMaxSpeed().x;
 	maxScreenSpeed.y = player.getMaxSpeed().y;
 }
@@ -172,12 +172,12 @@ void Engine::spawnPlayer()
 void Engine::spawnEnemy()
 {
 	enemies.clear();
-	for(auto it = mapScripts.frukSpawnPoints.begin();it != mapScripts.frukSpawnPoints.end(); ++it)
+	for(const auto& spawnPoint : map.GetSpawnPoints(Character::CharacterType::Fruk))
 	{
 		Character* newEnemy = new Fruk();
-		newEnemy->setTextures(*textureManager.getFrukTextures());
-		enemies.push_back(newEnemy);
-		enemies.back()->spawn(it->first, it->second);
+		newEnemy->setTextures(textureManager.getFrukTextures());
+		enemies.push_back(*newEnemy);
+		enemies.back().spawn(spawnPoint.x, spawnPoint.y);
 	}
 }
 
@@ -196,8 +196,7 @@ Engine::GameState Engine::activateFieldsUnderCharacter(Character& character)
 
 bool Engine::playerWon()
 {
-	
-	return false;
+	return characterOnTile(player, 10, 0);
 }
 
 bool Engine::characterOnTile(Character & character, int x, int y)

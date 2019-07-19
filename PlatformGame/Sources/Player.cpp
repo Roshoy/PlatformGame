@@ -2,7 +2,7 @@
 
 
 
-Player::Player(Vector2f sscale, Vector2f ssize) : Character(sscale, Character::Player, ssize)
+Player::Player(const sf::Vector2f& sscale, const sf::Vector2f& ssize) : Character(sscale, Character::Player, ssize)
 {
 	acceleration = 2.5;
 	maxVelocity.x = 10;

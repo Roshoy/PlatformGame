@@ -22,7 +22,7 @@ public:
 	void setTexture(Texture& tex);
 	int getType() const;
 	void setType(int newType);
-	int typeT; //texture type TODO: this type defines field
+	int typeT; //textures type TODO: this type defines field
 	bool isSolid();
 	void setSolid(bool solid);
 	Vector2f getPosition() const;
