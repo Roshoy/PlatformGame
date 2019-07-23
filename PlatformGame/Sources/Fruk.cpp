@@ -1,6 +1,7 @@
 #include "Fruk.h"
+#include <iostream>
 
-Fruk::Fruk(const sf::Vector2f& sscale, const sf::Vector2f& ssize):Character(sscale, Character::Fruk, ssize)
+Fruk::Fruk(const sf::Vector2f& sscale, const sf::Vector2f& ssize):Character(sscale, Character::CharacterType::Fruk, ssize)
 {
 	maxVelocity.x = 3;
 	velocity.x = 2;
@@ -8,7 +9,7 @@ Fruk::Fruk(const sf::Vector2f& sscale, const sf::Vector2f& ssize):Character(ssca
 	acceleration = 2.5;
 	setAnimationSpeed(Idle, 20);
 	setAnimationSpeed(Run, 40);
-	cout << "Enemy spawned\n";
+	std::cout << "Enemy spawned\n";
 }
 
 void Fruk::updateNextPosition(const sf::Vector2f& newPosition)

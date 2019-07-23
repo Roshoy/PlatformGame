@@ -14,7 +14,7 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 	{
 		return Nothing;
 	}
-	if(objA.getCharacterType() == Character::Player)
+	if(objA.getCharacterType() == Character::CharacterType::Player)
 	{
 		if(objA.getCurrentRect().height + objA.getCurrentRect().top < objB.getCurrentRect().top)
 		{
@@ -72,7 +72,7 @@ sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& curr
 		dy = max(lastRect.top, boundary);
 	}
 	
-	return {dx, dy};
+	return {float(dx), float(dy)};
 }
 
 bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)

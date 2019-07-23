@@ -10,6 +10,8 @@ Map::Map(int x, int y)
 	//background->setFillColor(sf::Color::Black);
 	sf::Vector2i playerSpwnPoint(0,0);
 	sf::Vector2i enemySpwnPoint(50, 0);
+
+	/////// Fast ugly workaround just to make it work
 	std::vector<sf::Vector2i> psps;
 	psps.push_back(playerSpwnPoint);
 	std::vector<sf::Vector2i> esps;
@@ -18,6 +20,7 @@ Map::Map(int x, int y)
 		(Character::CharacterType::Player, psps));
 	spawnPoints.insert(std::pair<Character::CharacterType, std::vector<sf::Vector2i>>
 		(Character::CharacterType::Fruk, esps));
+	////////////////////////////////
 	setMapSize(x, y);
 }
 

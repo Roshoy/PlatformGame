@@ -7,7 +7,7 @@ class TextureManager
 {
 public:
 	TextureManager(const std::string& textureDir = "Textures/");
-	~TextureManager();
+	//~TextureManager(){};
 	
 	void setCharacterTextures(const Character& character);
 	void setMapTextures(Map& map);

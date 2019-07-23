@@ -1,4 +1,5 @@
 #include "Character.h"
+#include "Fields/Field.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void Character::setPosition(const sf::Vector2f& pos)
 
 void Character::spawn(const sf::Vector2f& pos)
 {
-	setPosition(pos*Field::fieldSize);
+	setPosition(pos * Field::fieldSize);
 	body.setOrigin(scale.x * textureSize.x / 2, scale.y*textureSize.y - size.y / 2);
 }
 
@@ -53,6 +54,7 @@ void Character::updateTexture(bool right)
 		}
 		else
 		{
+			std::cout << "Idle\n";
 			setState(Idle);
 		}
 	}else if (velocity.y > 0)
@@ -73,11 +75,11 @@ void Character::updateTexture(bool right)
 	}
 }
 
-void Character::draw(RenderTarget& target, RenderStates states) const
+void Character::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	
 	sf::Transform transform = getTransform();
 	
 	target.draw(body, transform);
-	//target.draw(hitbox, transform);
+	target.draw(hitbox, transform);
 }

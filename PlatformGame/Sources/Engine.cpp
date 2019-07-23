@@ -145,7 +145,7 @@ void Engine::frukMovement()
 {
 	for (auto& enemy : enemies) {
 		sf::Vector2i direction;
-		if (enemy.getSpeed().x < 0) {
+		if (enemy.getSpeed().x <= 0) {
 			direction.x = -1;
 		}
 		else if (enemy.getSpeed().x > 0) {
@@ -192,6 +192,7 @@ Engine::GameState Engine::activateFieldsUnderCharacter(Character& character)
 		
 		}
 	}
+	return GameState::On;
 }
 
 bool Engine::playerWon()

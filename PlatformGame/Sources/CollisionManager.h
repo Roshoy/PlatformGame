@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "Character.h"
 #include <list>
+#include "Map.h"
 
 
 class CollisionManager
