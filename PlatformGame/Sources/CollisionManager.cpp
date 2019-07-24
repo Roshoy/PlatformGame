@@ -49,7 +49,7 @@ CollisionManager::CollisionResult CollisionManager::playerCollisionWithEnemies()
 
 sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& currentRect, const Rect<float>& lastRect) 
 {
-	int dx = lastRect.left - currentRect.left;
+	float dx = lastRect.left - currentRect.left;
 	if(dx > 0)
 	{
 		float boundary = getRightMoveLimit(currentRect,dx);
@@ -60,7 +60,7 @@ sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& curr
 		dx = max(lastRect.left, boundary);
 	}
 	
-	int dy = lastRect.top - currentRect.top;
+	float dy = lastRect.top - currentRect.top;
 	if (dy > 0)
 	{
 		float boundary = getDownMoveLimit(currentRect, dy);
@@ -72,7 +72,7 @@ sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& curr
 		dy = max(lastRect.top, boundary);
 	}
 	
-	return {float(dx), float(dy)};
+	return {currentRect.left + dx, currentRect.top + dy};
 }
 
 bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)

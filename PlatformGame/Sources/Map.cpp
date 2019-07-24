@@ -8,7 +8,7 @@ Map::Map(int x, int y)
 	background = RectangleShape(sf::Vector2f(0, 0));
 	background.setFillColor(sf::Color(100, 150, 255));	
 	//background->setFillColor(sf::Color::Black);
-	sf::Vector2i playerSpwnPoint(0,0);
+	sf::Vector2i playerSpwnPoint(30,0);
 	sf::Vector2i enemySpwnPoint(50, 0);
 
 	/////// Fast ugly workaround just to make it work
