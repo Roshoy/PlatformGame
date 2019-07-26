@@ -1,5 +1,17 @@
 #include "CollisionManager.h"
-#include <valarray>
+
+
+CollisionManager::CollisionManager( Player& player,  std::list<Character*>& enemies,  Map& map)
+{
+	Init(player, enemies, map);
+}
+
+void CollisionManager::Init( Player & player,  std::list<Character*>& enemies,  Map & map)
+{
+	this->player = &player;
+	this->enemies = &enemies;
+	this->map = &map;
+}
 
 bool CollisionManager::collisionWillBeBetweenCharacters(const Character & objA, const Character & objB)
 {
@@ -13,8 +25,7 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 	if(!collisionWillBeBetweenCharacters(objA,objB))
 	{
 		return Nothing;
-	}
-	if(objA.getCharacterType() == Character::CharacterType::Player)
+	}else if(objA.getCharacterType() == Character::CharacterType::Player)
 	{
 		if(objA.getCurrentRect().height + objA.getCurrentRect().top < objB.getCurrentRect().top)
 		{
@@ -28,16 +39,16 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 
 CollisionManager::CollisionResult CollisionManager::playerCollisionWithEnemies()
 {
-	auto iter = enemies.begin();
-	while(iter != enemies.end())
+	auto iter = enemies->begin();
+	while(iter != enemies->end())
 	{
-		CollisionResult b = collisionBetweenCharactersOutcome(player, *iter);
+		CollisionResult b = collisionBetweenCharactersOutcome(*player, **iter);
 		switch (b)
 		{
 		case ADies:
 			return ADies;
 		case BDies:
-			enemies.erase(iter++);
+			enemies->erase(iter++);
 			break;
 		case Nothing:
 			iter++;
@@ -47,32 +58,39 @@ CollisionManager::CollisionResult CollisionManager::playerCollisionWithEnemies()
 	return Nothing;
 }
 
-sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& currentRect, const Rect<float>& lastRect) 
+sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& currentRect, const Rect<float>& nextRect) 
 {
-	float dx = lastRect.left - currentRect.left;
+	float dx = nextRect.left - currentRect.left;
 	if(dx > 0)
 	{
-		float boundary = getRightMoveLimit(currentRect,dx);
-		dx = min(lastRect.left, boundary - lastRect.width);
+		float rightBoundary = getRightMoveLimit(currentRect,dx);
+		dx = min(nextRect.left, rightBoundary - nextRect.width);
 	}else if(dx < 0)
 	{
-		float boundary = getLeftMoveLimit(currentRect, dx);
-		dx = max(lastRect.left, boundary);
+		float leftBoundary = getLeftMoveLimit(currentRect, dx);
+		dx = max(nextRect.left, leftBoundary);
+	}else
+	{
+		dx = nextRect.left;
 	}
 	
-	float dy = lastRect.top - currentRect.top;
+	float dy = nextRect.top - currentRect.top;
 	if (dy > 0)
 	{
-		float boundary = getDownMoveLimit(currentRect, dy);
-		dy = min(lastRect.top, boundary - lastRect.height);
+		float downBoundary = getDownMoveLimit(currentRect, dy);
+		dy = min(nextRect.top, downBoundary - nextRect.height);
 	}
 	else if (dy < 0)
 	{
-		float boundary = getUpMoveLimit(currentRect, dy);
-		dy = max(lastRect.top, boundary);
+		float topBoundary = getUpMoveLimit(currentRect, dy);
+		dy = max(nextRect.top, topBoundary);
+	}
+	else
+	{
+		dy = nextRect.top;
 	}
 	
-	return {currentRect.left + dx, currentRect.top + dy};
+	return {dx, dy};
 }
 
 bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)
@@ -85,7 +103,7 @@ bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)
 			y <= (currentRect.top + currentRect.height) / Field::fieldSize ;
 			y++)
 		{			
-			if(map.getField(x,y).isSolid()){ return true; }
+			if(map->getField(x,y).isSolid()){ return true; }
 		}
 	}
 	return false;
@@ -101,7 +119,7 @@ float CollisionManager::getUpMoveLimit(const sf::FloatRect& character, float dy)
 	for (;y<Map::mapDimensions.y && y >= 0 && y >= minY; y--)
 	if (y >= 0) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (map.getField(x, y).isSolid()) {
+			if (map->getField(x, y).isSolid()) {
 				return (y + 1)*Field::fieldSize;
 			}
 		}
@@ -119,7 +137,7 @@ float CollisionManager::getRightMoveLimit(const sf::FloatRect& character, float 
 	for (;x >= 0 && x < Map::mapDimensions.x && x <= maxX; x++) {
 		for (int y = L; y <= P && y >= 0; y++) {
 			
-			if (map.getField(x, y).isSolid()) { return (x)*Field::fieldSize;}
+			if (map->getField(x, y).isSolid()) { return (x)*Field::fieldSize;}
 		}
 	}
 	
@@ -135,7 +153,7 @@ float CollisionManager::getDownMoveLimit(const sf::FloatRect& character, float d
 	int maxY = (character.height + (character.top + dy)) / Field::fieldSize;
 	for (;y >= 0 && y < Map::mapDimensions.y && y <= maxY; y++) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (map.getField(x, y).isSolid()) {				
+			if (map->getField(x, y).isSolid()) {				
 				return y * Field::fieldSize;
 			}
 		}
@@ -152,7 +170,7 @@ float CollisionManager::getLeftMoveLimit(const FloatRect& character, float dx) c
 	int minX = (character.width + dx) / Field::fieldSize;
 	for (;x<Map::mapDimensions.x && x >= 0 && x >= minX;x--) {
 		for (int y = L; y <= P && y >= 0; y++) {
-			if (map.getField(x, y).isSolid()) {
+			if (map->getField(x, y).isSolid()) {
 				return (x + 1)*Field::fieldSize;
 			}
 		}

@@ -54,7 +54,6 @@ void Character::updateTexture(bool right)
 		}
 		else
 		{
-			std::cout << "Idle\n";
 			setState(Idle);
 		}
 	}else if (velocity.y > 0)

@@ -20,7 +20,7 @@ public:
 	CharacterType getCharacterType() const;
 	void setPosition(const sf::Vector2f& pos);
 	void spawn(const sf::Vector2f& pos = sf::Vector2f(0,0));
-	void updateNextPosition(const sf::Vector2f& newPosition) override;
+	virtual void updateNextPosition(const sf::Vector2f& newPosition) override;
 	void updateTexture(bool right);
 	void spawn(float x, float y);
 

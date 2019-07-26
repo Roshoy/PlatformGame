@@ -9,14 +9,14 @@ class CollisionManager
 {
 public:
 	CollisionManager() = default;
-	CollisionManager(const Player& player, const std::list<Character>& enemies, const Map& map):
-		player(player), enemies(enemies), map(map){}
-	
+	CollisionManager( Player& player,  std::list<Character*>& enemies,Map& map);
+
+	void Init( Player& player,  std::list<Character*>& enemies,  Map& map);
 	enum CollisionResult { Nothing, ADies, BDies };
 
 	CollisionResult playerCollisionWithEnemies();
 
-	sf::Vector2f characterCollisionWithMap(const sf::Rect<float>& currentRect, const sf::Rect<float>& lastRect);	
+	sf::Vector2f characterCollisionWithMap(const sf::Rect<float>& currentRect, const sf::Rect<float>& nextRect);	
 
 private:
 	bool groundUnderneath(const sf::Rect<float> currentRect);
@@ -25,9 +25,9 @@ private:
 	bool rectCollisionWithMap(const sf::Rect<float>& currentRect);
 	sf::Vector2f approximatePositionX(const sf::Rect<float>& currentRect);
 	sf::Vector2f approximatePositionY(const sf::Rect<float>& currentRect);
-	Player player;
-	std::list<Character> enemies;
-	Map map;
+	Player* player;
+	std::list<Character*>* enemies;
+	Map* map;
 	float getUpMoveLimit(const sf::FloatRect& character, float dy) const;
 	float getRightMoveLimit(const sf::FloatRect& character, float dx) const;
 	float getDownMoveLimit(const sf::FloatRect& character, float dy) const;

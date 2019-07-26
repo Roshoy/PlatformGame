@@ -22,10 +22,10 @@ Engine::GameState Engine::runEngine()
 	spawnPlayer();
 	spawnEnemy();		
 	
-	collisionManager = CollisionManager(player, enemies, map);
+	collisionManager.Init(player, enemies, map);
 
 	GameState gameState = On;
-
+	cout << endl<<Map::mapDimensions.x << endl;
 	while (window->isOpen()) {
 		Event event;
 		if (window->pollEvent(event)) {
@@ -46,7 +46,7 @@ Engine::GameState Engine::runEngine()
 		window->draw(player);
 		
 		for (const auto& enemy: enemies) {
-			window->draw(enemy);
+			window->draw(*enemy);
 		}
 		window->display();
 		if (gameState != On) {
@@ -145,17 +145,17 @@ void Engine::frukMovement()
 {
 	for (auto& enemy : enemies) {
 		sf::Vector2i direction;
-		if (enemy.getSpeed().x <= 0) {
+		if (enemy->getSpeed().x < 0) {
 			direction.x = -1;
 		}
-		else if (enemy.getSpeed().x > 0) {
+		else if (enemy->getSpeed().x > 0) {
 			direction.x = 1;
 		}
 		
-		enemy.updateSpeed(direction);
-		sf::Vector2f newPosition = collisionManager.characterCollisionWithMap(enemy.getCurrentRect(), enemy.getNextRect());
-		enemy.updateNextPosition(newPosition);
-		enemy.updatePosition();
+		enemy->updateSpeed(direction);
+		sf::Vector2f newPosition = collisionManager.characterCollisionWithMap(enemy->getCurrentRect(), enemy->getNextRect());
+		enemy->updateNextPosition(newPosition);
+		enemy->updatePosition();
 	}
 }
 
@@ -176,8 +176,8 @@ void Engine::spawnEnemy()
 	{
 		Character* newEnemy = new Fruk();
 		newEnemy->setTextures(textureManager.getFrukTextures());
-		enemies.push_back(*newEnemy);
-		enemies.back().spawn(spawnPoint.x, spawnPoint.y);
+		enemies.push_back(newEnemy);
+		enemies.back()->spawn(spawnPoint.x, spawnPoint.y);
 	}
 }
 
