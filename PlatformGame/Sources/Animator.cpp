@@ -1,76 +1,81 @@
 #include "Animator.h"
 #include <iostream>
 
-int Animator::FRAMES_PER_SEC = 360;
+int Animator::_FRAMES_PER_SEC = 360;
+
+std::map<State, std::string> Animator::_stateName = { {State::Idle, "idle"}, 
+	{State::Fall, "fall"}, 
+	{State::Jump, "jump"}, 
+	{State::Run, "run"} };
 
 Animator::Animator()
 {
-	animationSpeeds.insert(std::make_pair(Idle, 50));
-	animationSpeeds.insert(std::make_pair(Run, 70));
-	//animationSpeeds.insert(std::make_pair(Jump, 50));
-	animationSpeeds.insert(std::make_pair(Fall, 100));
+	_animationSpeeds.insert(std::make_pair(State::Idle, 50));
+	_animationSpeeds.insert(std::make_pair(State::Run, 70));
+	//_animationSpeeds.insert(std::make_pair(Jump, 50));
+	_animationSpeeds.insert(std::make_pair(State::Fall, 100));
 }
 
 void Animator::setState(State newState)
 {
-	if (state == newState)return;
-	textureIdToShow = 0;
-	if(animationSpeeds[newState] != 0)
-		framesPassed = FRAMES_PER_SEC/animationSpeeds[newState];
-	state = newState;
+	if (_state == newState)return;
+	_textureIdToShow = 0;
+	if(_animationSpeeds[newState] != 0)
+		_framesPassed = _FRAMES_PER_SEC/_animationSpeeds[newState];
+	_state = newState;
 }
 
 void Animator::setNextTexture(float vYMax, float vY)
 {	
-	framesPassed++;
-	switch(state)
+	_framesPassed++;
+	switch(_state)
 	{
-	case Idle:
+	case State::Idle:
 		setNextTextureInCycle();
 		break;
-	case Run:
+	case State::Run:
 		setNextTextureInCycle();
 		break;
-	case Jump:
+	case State::Jump:
 		setNextTextureJump(vYMax, vY);
 		break;
-	case Fall:
+	case State::Fall:
 		setNextTextureInCycle();
 		break;
 	}
-	textureSize = static_cast<sf::Vector2f>(nextTextureToShow->getSize());
+	_textureSize = static_cast<sf::Vector2f>(_nextTextureToShow->getSize());
 }
 
-void Animator::setTextures(std::map<Animator::State, std::vector<sf::Texture>>& newTextures)
+void Animator::setTextures(std::map<State, std::vector<sf::Texture>>& newTextures)
 {
-	textures = newTextures;
-	if (textures.begin()->second.size() > 0) {
-		nextTextureToShow = &textures.begin()->second[0];
+	_textures = newTextures;
+	if (_textures.begin()->second.size() > 0) {
+		_nextTextureToShow = &_textures.begin()->second[0];
 		
 	}
-	textureSize = static_cast<sf::Vector2f>(nextTextureToShow->getSize());
+	_textureSize = static_cast<sf::Vector2f>(_nextTextureToShow->getSize());
 
 }
 
 void Animator::setAnimationSpeed(State s, int speed)
 {
-	animationSpeeds[s] = speed;
+	_animationSpeeds[s] = speed;
 }
 
 void Animator::setNextTextureJump(float vYMax, float vY)
 {
-	if (textures.find(Jump) == textures.end())return;
-	textureIdToShow = abs(vY) * textures[Jump].size() / (vYMax+1);
-	nextTextureToShow = &textures[Jump][textureIdToShow];
+	if (_textures.find(State::Jump) == _textures.end())return;
+	_textureIdToShow = abs(vY) * _textures[State::Jump].size() / (vYMax+1);
+	_nextTextureToShow = &_textures[State::Jump][_textureIdToShow];
 }
 
 void Animator::setNextTextureInCycle()
 {
-	if(framesPassed >= FRAMES_PER_SEC / animationSpeeds[state])
+	if(_framesPassed >= _FRAMES_PER_SEC / _animationSpeeds[_state])
 	{
-		textureIdToShow = (textureIdToShow + 1) % textures[state].size();
-		nextTextureToShow = &textures[state][textureIdToShow];
-		framesPassed = 0;
+		_textureIdToShow = (_textureIdToShow + 1) % _textures[_state].size();
+		_nextTextureToShow = &_textures[_state][_textureIdToShow];
+		_framesPassed = 0;
 	}
 }
  

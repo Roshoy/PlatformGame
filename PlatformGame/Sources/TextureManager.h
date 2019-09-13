@@ -12,14 +12,14 @@ public:
 	void setCharacterTextures(const Character& character);
 	void setMapTextures(Map& map);
 	void loadTextures();
-	std::map<Animator::State, std::vector<sf::Texture>> getPlayerTextures() const;
-	std::map<Animator::State, std::vector<sf::Texture>> getFrukTextures() const;
+	std::map<State, std::vector<sf::Texture>> getCharacterTextures(const Character::CharacterType& charType) const;
 private:
-	std::string texturesDir;
-	std::map<Animator::State, std::vector<sf::Texture>> playerTextures;
-	std::map<Animator::State, std::vector<sf::Texture>> frukTextures;
-	std::vector<sf::Texture> fieldTextures;
-	void loadCharacterTextures(const std::string& character, int texHeight, int texWidth);
+	std::string _texturesDir;
+	std::map<State, std::vector<sf::Texture>> _playerTextures;
+	std::map<State, std::vector<sf::Texture>> _frukTextures;
+	std::map<Character::CharacterType, std::map<State, std::vector<sf::Texture>>> _characterTextures;
+	std::vector<sf::Texture> _fieldTextures;
+	void loadCharacterTextures(const Character::CharacterType& charType, const State& state, int count);
 	void loadFrukTextures();
 	void loadPlayerTextures();
 	void loadFieldTextures();

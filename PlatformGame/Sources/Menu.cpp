@@ -1,66 +1,65 @@
 #include "Menu.h"
 
-Menu::Menu(RenderWindow & win, Font & f, Vector2f bSize, float fSize)
+Menu::Menu(sf::RenderWindow& win, sf::Font& f, const sf::Vector2f& bSize, float fSize):
+	_window(win),
+	_font(f),
+	_buttonSize(bSize),
+	_fontSize(fSize)
 {
-	window = &win;
-	font = &f;
-	buttonSize = bSize;
-	fontSize = fSize;
 }
 
-void Menu::addButton(string ss)
+void Menu::addButton(const std::string& ss)
 {
-	Button b(buttonSize);
+	Button b(_buttonSize);
 	b.setString(ss);
-	b.setFont(*font);
-	b.setTextSize(fontSize);
-	button.push_back(b);
+	b.setFont(_font);
+	b.setTextSize(_fontSize);
+	_button.push_back(b);
 	
 	centerButtons();
 }
 
 int Menu::runMenu()
 {
-
-	while (window->isOpen()) {
-		Event event;
-		if (window->pollEvent(event)) {
-			if (event.type == Event::Closed) {
-				window->close();
-				return button.size() - 1;
+	while (_window.isOpen()) {
+		sf::Event event;
+		if (_window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				_window.close();
+				return _button.size() - 1;
 			}
-
 		}
 		
-		for (int i = 0; i < button.size(); i++) {
-			if (button[i].highlighted(*window, Color::Blue) && Mouse::isButtonPressed(Mouse::Left)) {
-				cout << i << " przycisk\n";
+		for (int i = 0; i < _button.size(); i++) {
+			if (_button[i].highlighted(_window, sf::Color::Blue) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+				//std::cout << i << " przycisk\n";
 				return i;
 			}
 		}
 
-		window->setView(window->getDefaultView());
-		window->clear();
-		for (int i = 0; i < button.size(); i++) {
-			window->draw(button[i]);
+		_window.setView(_window.getDefaultView());
+		_window.clear();
+		for (const auto& button : _button)
+		{
+			_window.draw(button);
 		}
-		window->draw(*title);
-		window->display();
+		_window.draw(_title);
+		_window.display();
 	}
-	return button.size()-1;
+	return _button.size()-1;
 }
 
-void Menu::setTitle(string t)
+void Menu::setTitle(const std::string& t)
 {
-	title = new Text(t, *font, fontSize);
-	title->setPosition(window->getSize().x / 2 - title->getLocalBounds().width / 2, 100.f);
+	_title = sf::Text(t, _font, _fontSize);
+	_title.setPosition(_window.getSize().x / 2 - _title.getLocalBounds().width / 2, 100.f);
 }
 
 void Menu::centerButtons()
 {
-	float gap = (window->getSize().y - button.size() * buttonSize.y - 100.f - fontSize) / (button.size() + 1);
-	cout << gap << endl;
-	for (int i = 0; i < button.size(); i++) {
-		button[i].setPosition(Vector2f((window->getSize().x - buttonSize.x) / 2, 100.f + fontSize + (i + 1)*gap + buttonSize.y*i));
+	float gap = (_window.getSize().y - _button.size() * _buttonSize.y - 100.f - _fontSize) / (_button.size() + 1);
+	//std::cout << gap << std::endl;
+	for (int i = 0; i < _button.size(); i++) {
+		_button[i].setPosition(sf::Vector2f((_window.getSize().x - _buttonSize.x) / 2, 100.f + _fontSize + (i + 1)*gap + _buttonSize.y*i));
 	}
 }

@@ -12,9 +12,10 @@
 using namespace sf;
 using namespace std;
 
+enum class GameState { On, Win, Lose };
+
 class Engine {
 public:
-	enum GameState { On, Win, Lose };
 	Engine(RenderWindow& win);
 	GameState runEngine();
 	void scrollMap();
@@ -24,20 +25,20 @@ public:
 
 
 private:
-	CollisionManager collisionManager;
-	TextureManager textureManager;
+	CollisionManager _collisionManager;
+	TextureManager _textureManager;
 	void spawnPlayer();
 	void spawnEnemy();
-	sf::Vector2f screenSpeed;
-	sf::Vector2f maxScreenSpeed;
-	Map map;
-	RenderWindow* window;
-	Player player;
-	std::list<Character*> enemies;
-	View map_view;
-	static std::string texturesDir;
+	sf::Vector2f _screenSpeed;
+	sf::Vector2f _maxScreenSpeed;
+	Map _map;
+	RenderWindow* _window;
+	Player _player;
+	std::list<Character*> _enemies;
+	View _map_view;
+	static std::string _texturesDir;
 
-	Engine::GameState activateFieldsUnderCharacter(Character& character);
+	GameState activateFieldsUnderCharacter(Character& character);
 	bool playerWon();
 	bool characterOnTile(Character& character, int x, int y);
 

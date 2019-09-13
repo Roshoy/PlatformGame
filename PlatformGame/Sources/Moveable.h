@@ -14,7 +14,7 @@ public:
 	sf::Vector2f getMaxSpeed() const;
 	sf::Vector2f getMaxAcceleration() const;
 	sf::Vector2f getSpeed() const;
-	bool isInAir() const { return inAir; }
+	bool isInAir() const { return _inAir; }
 	virtual void setPosition(sf::Vector2f pos);
 
 	virtual void updateNextPosition(const sf::Vector2f& newPosition);
@@ -24,14 +24,14 @@ public:
 	void jump();
 protected:
 
-	sf::Sprite body;
-	sf::Vector2f size;
-	sf::Vector2f scale;
-	bool inAir;
-	sf::Vector2f nextPosition;
-	sf::Vector2f velocity;
-	sf::Vector2f maxVelocity;
-	float acceleration;
-	float retardation;	
+	sf::Sprite _body;
+	sf::Vector2f _size;
+	sf::Vector2f _scale;
+	bool _inAir;
+	sf::Vector2f _nextPosition;
+	sf::Vector2f _velocity;
+	sf::Vector2f _maxVelocity;
+	float _acceleration;
+	float _retardation;	
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 };

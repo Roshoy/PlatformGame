@@ -4,22 +4,19 @@
 #include <vector>
 #include "Button.h"
 
-using namespace std;
-using namespace sf;
-
 class Menu {
 public:
-	Menu(RenderWindow& win, Font& f, Vector2f bSize = Vector2f(300.f, 100.f), float fSize = 50);
-	Vector2f buttonSize;
-	float fontSize;
-	void addButton(string ss);
+	Menu(sf::RenderWindow& win, sf::Font& f, const sf::Vector2f& bSize = sf::Vector2f(300.f, 100.f), float fSize = 50);
+	sf::Vector2f _buttonSize;
+	float _fontSize;
+	void addButton(const std::string& ss);
 	int runMenu();
-	void setTitle(string t);
+	void setTitle(const std::string& t);
 private:
-	Text* title;
-	Font* font;
-	RenderWindow* window;
-	vector<Button> button;
+	sf::Text _title;
+	sf::Font& _font;
+	sf::RenderWindow& _window;
+	std::vector<Button> _button;
 	void centerButtons();
 	
 

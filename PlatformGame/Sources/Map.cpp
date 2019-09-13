@@ -1,24 +1,24 @@
 #include "Map.h"
 #include "Fields/Field.h"
 
-sf::Vector2i Map::mapDimensions;
+sf::Vector2i Map::_mapDimensions;
 
 Map::Map(int x, int y)
 {	
-	background = RectangleShape(sf::Vector2f(0, 0));
-	background.setFillColor(sf::Color(100, 150, 255));
-	//background->setFillColor(sf::Color::Black);
+	_background = RectangleShape(sf::Vector2f(0, 0));
+	_background.setFillColor(sf::Color(100, 150, 255));
+	//_background->setFillColor(sf::Color::Black);
 	sf::Vector2i playerSpwnPoint(3,0);
-	sf::Vector2i enemySpwnPoint(5, 0);
+	sf::Vector2i enemySpwnPoint(10, 0);
 
 	/////// Fast ugly workaround just to make it work
 	std::vector<sf::Vector2i> psps;
 	psps.push_back(playerSpwnPoint);
 	std::vector<sf::Vector2i> esps;
 	esps.push_back(enemySpwnPoint);
-	spawnPoints.insert(std::pair<Character::CharacterType, std::vector<sf::Vector2i>>
+	_spawnPoints.insert(std::pair<Character::CharacterType, std::vector<sf::Vector2i>>
 		(Character::CharacterType::Player, psps));
-	spawnPoints.insert(std::pair<Character::CharacterType, std::vector<sf::Vector2i>>
+	_spawnPoints.insert(std::pair<Character::CharacterType, std::vector<sf::Vector2i>>
 		(Character::CharacterType::Fruk, esps));
 	////////////////////////////////
 	setMapSize(x, y);
@@ -26,27 +26,27 @@ Map::Map(int x, int y)
 
 void Map::setField(int x, int y, int textureId)
 {
-	if (x < 0 || y < 0 || x >= mapDimensions.x || y >= mapDimensions.y) {
+	if (x < 0 || y < 0 || x >= _mapDimensions.x || y >= _mapDimensions.y) {
 		return;
 	}
 	
-	fields[x][y] = Field(x,y);
-	fields[x][y].setSolid(isSolidTexture(textureId));
-	//fields[x][y]->typeT=type;
-	fields[x][y].setTexture(textures[textureId]);
+	_fields[x][y] = Field(x,y);
+	_fields[x][y].setSolid(isSolidTexture(textureId));
+	//_fields[x][y]->_typeT=_type;
+	_fields[x][y].setTexture(_textures[textureId]);
 }
 
 void Map::setMapSize(int x, int y)
 {
-	fields = new Field*[x];
+	_fields = new Field*[x];
 	for(int i =0; i<x; i++)
 	{
-		fields[i] = new Field[y];
+		_fields[i] = new Field[y];
 	}
 	
-	mapDimensions = sf::Vector2i(x,y);
+	_mapDimensions = sf::Vector2i(x,y);
 	
-	background.setSize(Vector2f(x*Field::fieldSize, y*Field::fieldSize));
+	_background.setSize(Vector2f(x*Field::_fieldSize, y*Field::_fieldSize));
 }
 
 void Map::saveMapFile() const
@@ -58,12 +58,12 @@ void Map::saveMapFile() const
 	}
 	
 
-	if (mapDimensions.x > 0) {
-		for (int y = 0; y < mapDimensions.y; y++) {
-			for (int x = 0; x < mapDimensions.x; x++) {
-				file << fields[x][y].getType() << " ";
+	if (_mapDimensions.x > 0) {
+		for (int y = 0; y < _mapDimensions.y; y++) {
+			for (int x = 0; x < _mapDimensions.x; x++) {
+				file << _fields[x][y].getType() << " ";
 			}
-			if (y != mapDimensions.y - 1) {
+			if (y != _mapDimensions.y - 1) {
 				file << "\n";
 			}
 		}
@@ -86,8 +86,8 @@ void Map::loadMapFile()
 	setMapSize(x, y);
 
 	if (x > 0 && y > 0) {
-		for (y = 0; y < mapDimensions.y; y++) {
-			for (x = 0; x < mapDimensions.x; x++) {
+		for (y = 0; y < _mapDimensions.y; y++) {
+			for (x = 0; x < _mapDimensions.x; x++) {
 				int textureId;
 				file >> textureId;
 				setField(x, y, textureId);
@@ -98,15 +98,15 @@ void Map::loadMapFile()
 
 void Map::setTextures(const std::vector<sf::Texture>& texture)
 {
-	this->textures = texture;
+	this->_textures = texture;
 }
 
 Field Map::getField(const sf::Vector2f& position) const
 {
-	int x = position.x / Field::fieldSize;
-	int y = position.y / Field::fieldSize;
-	if (x < mapDimensions.x && y < mapDimensions.y) {
-		return fields[x][y];
+	int x = position.x / Field::_fieldSize;
+	int y = position.y / Field::_fieldSize;
+	if (x < _mapDimensions.x && y < _mapDimensions.y) {
+		return _fields[x][y];
 	}
 	return NULL;
 }
@@ -114,20 +114,20 @@ Field Map::getField(const sf::Vector2f& position) const
 Field Map::getField(int x, int y) const
 {
 	if (x >= 0 && y >= 0 &&
-		x < mapDimensions.x && y < mapDimensions.y) {
-		return fields[x][y];
+		x < _mapDimensions.x && y < _mapDimensions.y) {
+		return _fields[x][y];
 	}
 	return NULL;
 }
 
 Vector2i Map::getMapRange() const
 {
-	return Vector2i(mapDimensions.x, mapDimensions.y);
+	return Vector2i(_mapDimensions.x, _mapDimensions.y);
 }
 
 std::vector<sf::Vector2i> Map::GetSpawnPoints(const Character::CharacterType & type) const
 {
-	return spawnPoints.at(type);
+	return _spawnPoints.at(type);
 }
 
 bool Map::isSolidTexture(int ind) const
@@ -146,10 +146,10 @@ bool Map::isSolidTexture(int ind) const
 void Map::draw(RenderTarget & target, RenderStates states) const
 {
 	Transform transform = getTransform();
-	target.draw(background, transform);
-	for (int x = 0; x < mapDimensions.x; x++) {
-		for (int y = 0; y < mapDimensions.y; y++) {
-			target.draw(fields[x][y], transform);
+	target.draw(_background, transform);
+	for (int x = 0; x < _mapDimensions.x; x++) {
+		for (int y = 0; y < _mapDimensions.y; y++) {
+			target.draw(_fields[x][y], transform);
 		}
 	}
 }

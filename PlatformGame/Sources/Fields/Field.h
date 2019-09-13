@@ -5,39 +5,39 @@
 using namespace sf;
 using namespace std;
 
+enum class FieldType
+{
+	Empty = 0,
+	Spawn = 1,
+	Script = 2
+};
+
 class Field: public Drawable, public Transformable {
-public:
-	enum FieldType
-	{
-		Empty = 0,		
-		Spawn = 1,
-		Script = 2
-	};
-	
+public:	
 	Field(int xx = 0, int yy = 0);
 
-	void init(float s = 0.f, int xx = 0, int yy = 0, FieldType type = Empty);
+	void init(float s = 0.f, int xx = 0, int yy = 0, FieldType type = FieldType::Empty);
 
 	void setPosition(Vector2f pos);
 	void setTexture(Texture& tex);
 	int getType() const;
 	void setType(int newType);
-	int typeT; //textures type TODO: this type defines field
+	int _typeT; //_characterTextures type TODO: this type defines field
 	bool isSolid();
 	void setSolid(bool solid);
 	Vector2f getPosition() const;
 
 	bool isUnique();
-	static float fieldSize;
-	static float textureSize;
+	static float _fieldSize;
+	static float _textureSize;
 protected:
 	
-	FieldType type;
-	bool unique;
-	bool solid;
+	FieldType _type;
+	bool _unique;
+	bool _solid;
 	
 private:
-	bool scripted;
-	Sprite sprite;
+	bool _scripted;
+	Sprite _sprite;
 	virtual void draw(RenderTarget &target, RenderStates states)const;
 };

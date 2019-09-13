@@ -10,7 +10,7 @@
 class Map : public Drawable, public Transformable {
 public:
 	Map(int x = 1, int y = 1);
-	Field** fields;
+	Field** _fields;
 	void setField(int x, int y, int type);
 	
 	void setMapSize(int x, int y);
@@ -24,18 +24,18 @@ public:
 
 	Vector2i getMapRange() const;
 
-	static sf::Vector2i mapDimensions;
+	static sf::Vector2i _mapDimensions;
 	std::vector<sf::Vector2i> GetSpawnPoints(const Character::CharacterType& type) const;
 private:
 
-	bool isSolidTexture(int ind) const;
+	bool isSolidTexture(int ind) const;/*
 	template<typename T>
 	static T createInstance() { return new T(); }
-	typedef std::map<Field::FieldType, Field*(*)()> FieldTypesMap;
-	FieldTypesMap fieldTypesMap;
-	std::map<Character::CharacterType, std::vector<sf::Vector2i>> spawnPoints;
-	std::vector<sf::Texture> textures;	//do vector
-	sf::RectangleShape background;
+	typedef std::_map<Field::FieldType, Field*(*)()> FieldTypesMap;*/
+//FieldTypesMap _fieldTypesMap;
+	std::map<Character::CharacterType, std::vector<sf::Vector2i>> _spawnPoints;
+	std::vector<sf::Texture> _textures;	//do vector
+	sf::RectangleShape _background;
 	virtual void draw(RenderTarget &target, RenderStates states)const;
 
 

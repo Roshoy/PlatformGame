@@ -8,9 +8,9 @@ CollisionManager::CollisionManager( Player& player,  std::list<Character*>& enem
 
 void CollisionManager::Init( Player & player,  std::list<Character*>& enemies,  Map & map)
 {
-	this->player = &player;
-	this->enemies = &enemies;
-	this->map = &map;
+	this->_player = &player;
+	this->_enemies = &enemies;
+	this->_map = &map;
 }
 
 bool CollisionManager::collisionWillBeBetweenCharacters(const Character & objA, const Character & objB)
@@ -39,16 +39,16 @@ CollisionManager::CollisionResult CollisionManager::collisionBetweenCharactersOu
 
 CollisionManager::CollisionResult CollisionManager::playerCollisionWithEnemies()
 {
-	auto iter = enemies->begin();
-	while(iter != enemies->end())
+	auto iter = _enemies->begin();
+	while(iter != _enemies->end())
 	{
-		CollisionResult b = collisionBetweenCharactersOutcome(*player, **iter);
+		CollisionResult b = collisionBetweenCharactersOutcome(*_player, **iter);
 		switch (b)
 		{
 		case ADies:
 			return ADies;
 		case BDies:
-			enemies->erase(iter++);
+			_enemies->erase(iter++);
 			break;
 		case Nothing:
 			iter++;
@@ -95,15 +95,15 @@ sf::Vector2f CollisionManager::characterCollisionWithMap(const Rect<float>& curr
 
 bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)
 {
-	for(int x=currentRect.left/Field::fieldSize;
-		x<=(currentRect.left+currentRect.width) / Field::fieldSize ;
+	for(int x=currentRect.left/Field::_fieldSize;
+		x<=(currentRect.left+currentRect.width) / Field::_fieldSize ;
 		x++)
 	{
-		for (int y = currentRect.top / Field::fieldSize;
-			y <= (currentRect.top + currentRect.height) / Field::fieldSize ;
+		for (int y = currentRect.top / Field::_fieldSize;
+			y <= (currentRect.top + currentRect.height) / Field::_fieldSize ;
 			y++)
 		{			
-			if(map->getField(x,y).isSolid()){ return true; }
+			if(_map->getField(x,y).isSolid()){ return true; }
 		}
 	}
 	return false;
@@ -111,16 +111,16 @@ bool CollisionManager::rectCollisionWithMap(const Rect<float>& currentRect)
 
 float CollisionManager::getUpMoveLimit(const sf::FloatRect& character, float dy) const
 {
-	int L = int(character.left / Field::fieldSize);
-	int P = int((character.left + character.width) / Field::fieldSize);
-	int y = int(character.top / Field::fieldSize);// -1;
-	if (P*Field::fieldSize == character.left + character.width) { P--; }
-	int minY = int((character.top + dy) / Field::fieldSize);
-	for (;y<Map::mapDimensions.y && y >= 0 && y >= minY; y--)
+	int L = int(character.left / Field::_fieldSize);
+	int P = int((character.left + character.width) / Field::_fieldSize);
+	int y = int(character.top / Field::_fieldSize);// -1;
+	if (P*Field::_fieldSize == character.left + character.width) { P--; }
+	int minY = int((character.top + dy) / Field::_fieldSize);
+	for (;y<Map::_mapDimensions.y && y >= 0 && y >= minY; y--)
 	if (y >= 0) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (map->getField(x, y).isSolid()) {
-				return (y + 1)*Field::fieldSize;
+			if (_map->getField(x, y).isSolid()) {
+				return (y + 1)*Field::_fieldSize;
 			}
 		}
 	}
@@ -129,49 +129,49 @@ float CollisionManager::getUpMoveLimit(const sf::FloatRect& character, float dy)
 
 float CollisionManager::getRightMoveLimit(const sf::FloatRect& character, float dx) const
 {
-	int L = int(character.top / Field::fieldSize);
-	int P = int((character.top + character.height) / Field::fieldSize);
-	int x = int((character.left + character.width) / Field::fieldSize);
-	int maxX = (character.width + (character.left + dx)) / Field::fieldSize+1;
-	if (P*Field::fieldSize == character.top + character.height) { P--; }
-	for (;x >= 0 && x < Map::mapDimensions.x && x <= maxX; x++) {
+	int L = int(character.top / Field::_fieldSize);
+	int P = int((character.top + character.height) / Field::_fieldSize);
+	int x = int((character.left + character.width) / Field::_fieldSize);
+	int maxX = (character.width + (character.left + dx)) / Field::_fieldSize+1;
+	if (P*Field::_fieldSize == character.top + character.height) { P--; }
+	for (;x >= 0 && x < Map::_mapDimensions.x && x <= maxX; x++) {
 		for (int y = L; y <= P && y >= 0; y++) {
 			
-			if (map->getField(x, y).isSolid()) { return (x)*Field::fieldSize;}
+			if (_map->getField(x, y).isSolid()) { return (x)*Field::_fieldSize;}
 		}
 	}
 	
-	return Field::fieldSize * Map::mapDimensions.x;
+	return Field::_fieldSize * Map::_mapDimensions.x;
 }
 
 float CollisionManager::getDownMoveLimit(const sf::FloatRect& character, float dy) const
 {
-	int L = int(character.left / Field::fieldSize);
-	int P = int((character.left + character.width) / Field::fieldSize);
-	int y = int((character.top + character.height) / Field::fieldSize);
-	if (P*Field::fieldSize == character.left + character.width) { P--; }
-	int maxY = (character.height + (character.top + dy)) / Field::fieldSize;
-	for (;y >= 0 && y < Map::mapDimensions.y && y <= maxY; y++) {
+	int L = int(character.left / Field::_fieldSize);
+	int P = int((character.left + character.width) / Field::_fieldSize);
+	int y = int((character.top + character.height) / Field::_fieldSize);
+	if (P*Field::_fieldSize == character.left + character.width) { P--; }
+	int maxY = (character.height + (character.top + dy)) / Field::_fieldSize;
+	for (;y >= 0 && y < Map::_mapDimensions.y && y <= maxY; y++) {
 		for (int x = L; x <= P && x >= 0; x++) {
-			if (map->getField(x, y).isSolid()) {				
-				return y * Field::fieldSize;
+			if (_map->getField(x, y).isSolid()) {				
+				return y * Field::_fieldSize;
 			}
 		}
 	}	
-	return Map::mapDimensions.y*Field::fieldSize;
+	return Map::_mapDimensions.y*Field::_fieldSize;
 }
 
 float CollisionManager::getLeftMoveLimit(const FloatRect& character, float dx) const
 {
-	int L = int(character.top / Field::fieldSize);
-	int P = int((character.top + character.height) / Field::fieldSize);
-	int x = int((character.left) / Field::fieldSize);
-	if (P*Field::fieldSize == character.top + character.height) { P--; }
-	int minX = (character.width + dx) / Field::fieldSize;
-	for (;x<Map::mapDimensions.x && x >= 0 && x >= minX;x--) {
+	int L = int(character.top / Field::_fieldSize);
+	int P = int((character.top + character.height) / Field::_fieldSize);
+	int x = int((character.left) / Field::_fieldSize);
+	if (P*Field::_fieldSize == character.top + character.height) { P--; }
+	int minX = (character.width + dx) / Field::_fieldSize;
+	for (;x<Map::_mapDimensions.x && x >= 0 && x >= minX;x--) {
 		for (int y = L; y <= P && y >= 0; y++) {
-			if (map->getField(x, y).isSolid()) {
-				return (x + 1)*Field::fieldSize;
+			if (_map->getField(x, y).isSolid()) {
+				return (x + 1)*Field::_fieldSize;
 			}
 		}
 	}

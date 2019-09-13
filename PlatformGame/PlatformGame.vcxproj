@@ -164,6 +164,8 @@
   <ItemGroup>
     <ClInclude Include="Sources\Animator.h" />
     <ClInclude Include="Sources\CollisionManager.h" />
+    <ClInclude Include="Sources\Fields\AbstractFieldScriptStrategy.h" />
+    <ClInclude Include="Sources\Fields\FieldScriptStrategy.h" />
     <ClInclude Include="Sources\Fruk.h" />
     <ClInclude Include="Sources\Moveable.h" />
     <ClInclude Include="Sources\Player.h" />

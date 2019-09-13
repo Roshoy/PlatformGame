@@ -54,9 +54,6 @@
     <ClCompile Include="Sources\CollisionManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\MapScripts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\Animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,10 +95,13 @@
     <ClInclude Include="Sources\CollisionManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\MapScripts.h">
+    <ClInclude Include="Sources\Animator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\Animator.h">
+    <ClInclude Include="Sources\Fields\FieldScriptStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Fields\AbstractFieldScriptStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

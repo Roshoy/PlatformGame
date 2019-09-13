@@ -14,7 +14,8 @@ public:
 		Player = 0,
 		Fruk = 1
 	};
-	static unsigned int characterTypesCount;
+	static std::map<Character::CharacterType, std::string> _CharacterNames;
+	static unsigned int _characterTypesCount;
 	Character(const sf::Vector2f& scale = sf::Vector2f(0, 0),CharacterType charName = CharacterType::Player, const sf::Vector2f& size = sf::Vector2f(0,0));	
 
 	CharacterType getCharacterType() const;
@@ -24,10 +25,10 @@ public:
 	void updateTexture(bool right);
 	void spawn(float x, float y);
 
-	static unsigned int spriteCount;
+	static unsigned int _spriteCount;
 	
 protected:
-	sf::RectangleShape hitbox;
-	CharacterType characterType;
+	sf::RectangleShape _hitbox;
+	CharacterType _characterType;
 	void draw(sf::RenderTarget& target, sf::RenderStates states)const override;
 };

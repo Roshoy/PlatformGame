@@ -75,12 +75,12 @@ void Button::setSize(const sf::Vector2f& s)
 	setTextPosition();
 }
 
-sf::Vector2f Button::getSize()
+sf::Vector2f Button::getSize() const
 {
 	return body.getSize();
 }
 
-sf::Vector2f Button::getPosition()
+sf::Vector2f Button::getPosition() const
 {
 	return body.getPosition();
 }

@@ -1,61 +1,61 @@
 #include "Field.h"
 
-float Field::fieldSize = 32;
-float Field::textureSize = 16;
+float Field::_fieldSize = 32;
+float Field::_textureSize = 16;
 
-Field::Field( int xx, int yy):type(Empty), unique(false), typeT(0), scripted(false)
+Field::Field( int xx, int yy):_type(FieldType::Empty), _unique(false), _typeT(0), _scripted(false)
 {
-	sprite.setPosition(Vector2f(xx*fieldSize, yy*fieldSize));
-	sprite.setScale(fieldSize / textureSize, fieldSize / textureSize);
+	_sprite.setPosition(Vector2f(xx*_fieldSize, yy*_fieldSize));
+	_sprite.setScale(_fieldSize / _textureSize, _fieldSize / _textureSize);
 }
 
 void Field::init(float s, int xx, int yy, FieldType type)
 {	
-	this->type = type;	
+	this->_type = type;	
 }
 
 void Field::setPosition(Vector2f pos)
 {
-	sprite.setPosition(pos);
+	_sprite.setPosition(pos);
 }
 
 void Field::setTexture(Texture& tex)
 {
-	sprite.setTexture(tex);
+	_sprite.setTexture(tex);
 }
 
 int Field::getType() const
 {
-	return typeT;
+	return _typeT;
 }
 
 void Field::setType(int newType)
 {
-	typeT = newType;
+	_typeT = newType;
 }
 
 bool Field::isSolid()
 {
-	return solid;
+	return _solid;
 }
 
 void Field::setSolid(bool solid)
 {
-	this->solid = solid;
+	this->_solid = solid;
 }
 
 Vector2f Field::getPosition() const
 {
-	return sprite.getPosition();
+	return _sprite.getPosition();
 }
 
 bool Field::isUnique()
 {
-	return unique;
+	return _unique;
 }
 
 void Field::draw(RenderTarget & target, RenderStates states) const
 {
 	Transform transform = getTransform();
-	target.draw(sprite, transform);
+	target.draw(_sprite, transform);
 }

@@ -2,35 +2,35 @@
 #include "Player.h"
 #include "Fruk.h"
 
-std::string Engine::texturesDir = "Textures/";
+std::string Engine::_texturesDir = "Textures/";
 
 Engine::Engine(sf::RenderWindow& win) {
-	window = &win;
-	map_view = sf::View(window->getDefaultView());
-	map = Map();
-	screenSpeed.x = 0;
-	screenSpeed.y = 0;
-	maxScreenSpeed.x = 10;
-	maxScreenSpeed.y = 23;
-	textureManager.loadTextures();	
+	_window = &win;
+	_map_view = sf::View(_window->getDefaultView());
+	_map = Map();
+	_screenSpeed.x = 0;
+	_screenSpeed.y = 0;
+	_maxScreenSpeed.x = 10;
+	_maxScreenSpeed.y = 23;
+	_textureManager.loadTextures();	
 }
 
-Engine::GameState Engine::runEngine()
+GameState Engine::runEngine()
 {		
-	textureManager.setMapTextures(map);
-	map.loadMapFile();
+	_textureManager.setMapTextures(_map);
+	_map.loadMapFile();
 	spawnPlayer();
 	spawnEnemy();		
 	
-	collisionManager.Init(player, enemies, map);
+	_collisionManager.Init(_player, _enemies, _map);
 
-	GameState gameState = On;
-	cout << endl<<Map::mapDimensions.x << endl;
-	while (window->isOpen()) {
+	GameState gameState = GameState::On;
+	cout << endl<<Map::_mapDimensions.x << endl;
+	while (_window->isOpen()) {
 		Event event;
-		if (window->pollEvent(event)) {
+		if (_window->pollEvent(event)) {
 			if (event.type == Event::Closed) {
-				window->close();
+				_window->close();
 			}
 		}
 		
@@ -40,66 +40,66 @@ Engine::GameState Engine::runEngine()
 		
 		scrollMap();
 		
-		window->setView(map_view);
-		window->clear();
-		window->draw(map);
-		window->draw(player);
+		_window->setView(_map_view);
+		_window->clear();
+		_window->draw(_map);
+		_window->draw(_player);
 		
-		for (const auto& enemy: enemies) {
-			window->draw(*enemy);
+		for (const auto& enemy: _enemies) {
+			_window->draw(*enemy);
 		}
-		window->display();
-		if (gameState != On) {
+		_window->display();
+		if (gameState != GameState::On) {
 			return gameState;
 		}
 		
 	}
-	return On;
+	return GameState::On;
 }
 
 
 void Engine::scrollMap()
 {
-	Vector2i MPlayerPos = window->mapCoordsToPixel(player.getPosition());
-	if (MPlayerPos.x + player.getSize().x > window->getSize().x - 250 && map_view.getCenter().x + window->getSize().x / 2 < 
-		map.getMapRange().x * Field::fieldSize - screenSpeed.x - 1) {
-		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
-			screenSpeed.x += player.getMaxAcceleration().x;
+	Vector2i MPlayerPos = _window->mapCoordsToPixel(_player.getPosition());
+	if (MPlayerPos.x + _player.getSize().x > _window->getSize().x - 250 && _map_view.getCenter().x + _window->getSize().x / 2 < 
+		_map.getMapRange().x * Field::_fieldSize - _screenSpeed.x - 1) {
+		if (_maxScreenSpeed.x > _screenSpeed.x + _player.getMaxAcceleration().x) {
+			_screenSpeed.x += _player.getMaxAcceleration().x;
 		}
 		else {
-			screenSpeed.x = maxScreenSpeed.x;
+			_screenSpeed.x = _maxScreenSpeed.x;
 		}
-		map_view.move(screenSpeed.x, 0);
+		_map_view.move(_screenSpeed.x, 0);
 	}
-	else if (MPlayerPos.x < 250 && map_view.getCenter().x - window->getSize().x / 2 > 0 + screenSpeed.x + 1) {
-		if (maxScreenSpeed.x > screenSpeed.x + player.getMaxAcceleration().x) {
-			screenSpeed.x += player.getMaxAcceleration().x;
+	else if (MPlayerPos.x < 250 && _map_view.getCenter().x - _window->getSize().x / 2 > 0 + _screenSpeed.x + 1) {
+		if (_maxScreenSpeed.x > _screenSpeed.x + _player.getMaxAcceleration().x) {
+			_screenSpeed.x += _player.getMaxAcceleration().x;
 		}
 		else {
-			screenSpeed.x = maxScreenSpeed.x;
+			_screenSpeed.x = _maxScreenSpeed.x;
 		}
-		map_view.move(-screenSpeed.x, 0);
+		_map_view.move(-_screenSpeed.x, 0);
 	}
 	else {
-		screenSpeed.x= 0;
+		_screenSpeed.x= 0;
 	}
 
-	if (MPlayerPos.y > window->getSize().y - 250 && map_view.getCenter().y + window->getSize().y / 2 <
-		map.getMapRange().y * Field::fieldSize - screenSpeed.y - 1) {
-		if (maxScreenSpeed.y > screenSpeed.y) {
-			screenSpeed.y += player.getMaxAcceleration().y;
+	if (MPlayerPos.y > _window->getSize().y - 250 && _map_view.getCenter().y + _window->getSize().y / 2 <
+		_map.getMapRange().y * Field::_fieldSize - _screenSpeed.y - 1) {
+		if (_maxScreenSpeed.y > _screenSpeed.y) {
+			_screenSpeed.y += _player.getMaxAcceleration().y;
 		}
-		map_view.move(0, screenSpeed.y);
+		_map_view.move(0, _screenSpeed.y);
 	}
 	else if (MPlayerPos.y < 100 &&
-		map_view.getCenter().y - window->getSize().y / 2 > 0 + screenSpeed.y + 1) {
-		if (maxScreenSpeed.y > screenSpeed.y) {
-			screenSpeed.y += player.getMaxAcceleration().y;
+		_map_view.getCenter().y - _window->getSize().y / 2 > 0 + _screenSpeed.y + 1) {
+		if (_maxScreenSpeed.y > _screenSpeed.y) {
+			_screenSpeed.y += _player.getMaxAcceleration().y;
 		}
-		map_view.move(0, -screenSpeed.y);
+		_map_view.move(0, -_screenSpeed.y);
 	}
 	else {
-		screenSpeed.y = 0;
+		_screenSpeed.y = 0;
 	}
 }
 
@@ -116,34 +116,34 @@ sf::Vector2i Engine::getPlayerInput()
 		direction.y = -1;
 	}
 	if (Keyboard::isKeyPressed(Keyboard::S)) {
-		map.saveMapFile();
+		_map.saveMapFile();
 	}
 	return direction;
 }
 
-Engine::GameState Engine::playerMovement()
+GameState Engine::playerMovement()
 {	
-	player.updateSpeed(getPlayerInput());
-	player.updateNextPosition(
-		collisionManager.characterCollisionWithMap(
-			player.getCurrentRect(), player.getNextRect()));
-	CollisionManager::CollisionResult res = collisionManager.playerCollisionWithEnemies();
-	GameState gameState = On;
-	if (res == CollisionManager::ADies)gameState = Lose;
-	player.updatePosition();
-	if (gameState != On) {
+	_player.updateSpeed(getPlayerInput());
+	_player.updateNextPosition(
+		_collisionManager.characterCollisionWithMap(
+			_player.getCurrentRect(), _player.getNextRect()));
+	CollisionManager::CollisionResult res = _collisionManager.playerCollisionWithEnemies();
+	GameState gameState = GameState::On;
+	if (res == CollisionManager::ADies)gameState = GameState::Lose;
+	_player.updatePosition();
+	if (gameState != GameState::On) {
 		return gameState;
 	}
-	//cout << "Player pos: " << player.getCurrentRect().left << " " << player.getCurrentRect().top << endl;
+
 	if (playerWon()) {
-		return Win;
+		return GameState::Win;
 	}
-	return On;
+	return GameState::On;
 }
 
 void Engine::frukMovement()
 {
-	for (auto& enemy : enemies) {
+	for (auto& enemy : _enemies) {
 		sf::Vector2i direction;
 		if (enemy->getSpeed().x < 0) {
 			direction.x = -1;
@@ -153,7 +153,7 @@ void Engine::frukMovement()
 		}
 		
 		enemy->updateSpeed(direction);
-		sf::Vector2f newPosition = collisionManager.characterCollisionWithMap(enemy->getCurrentRect(), enemy->getNextRect());
+		sf::Vector2f newPosition = _collisionManager.characterCollisionWithMap(enemy->getCurrentRect(), enemy->getNextRect());
 		enemy->updateNextPosition(newPosition);
 		enemy->updatePosition();
 	}
@@ -161,32 +161,32 @@ void Engine::frukMovement()
 
 void Engine::spawnPlayer()
 {
-	player = Player();
-	player.setTextures(textureManager.getPlayerTextures());
+	_player = Player();
+	_player.setTextures(_textureManager.getCharacterTextures(Character::CharacterType::Player));
 
-	player.spawn(map.GetSpawnPoints(Character::CharacterType::Player)[0].x, map.GetSpawnPoints(Character::CharacterType::Player)[0].y);
-	maxScreenSpeed.x = player.getMaxSpeed().x;
-	maxScreenSpeed.y = player.getMaxSpeed().y;
+	_player.spawn(_map.GetSpawnPoints(Character::CharacterType::Player)[0].x, _map.GetSpawnPoints(Character::CharacterType::Player)[0].y);
+	_maxScreenSpeed.x = _player.getMaxSpeed().x;
+	_maxScreenSpeed.y = _player.getMaxSpeed().y;
 }
 
 void Engine::spawnEnemy()
 {
-	enemies.clear();
-	for(const auto& spawnPoint : map.GetSpawnPoints(Character::CharacterType::Fruk))
+	_enemies.clear();
+	for(const auto& spawnPoint : _map.GetSpawnPoints(Character::CharacterType::Fruk))
 	{
 		Character* newEnemy = new Fruk();
-		newEnemy->setTextures(textureManager.getFrukTextures());
-		enemies.push_back(newEnemy);
-		enemies.back()->spawn(spawnPoint.x, spawnPoint.y);
+		newEnemy->setTextures(_textureManager.getCharacterTextures(Character::CharacterType::Fruk));
+		_enemies.push_back(newEnemy);
+		_enemies.back()->spawn(spawnPoint.x, spawnPoint.y);
 	}
 }
 
-Engine::GameState Engine::activateFieldsUnderCharacter(Character& character)
+GameState Engine::activateFieldsUnderCharacter(Character& character)
 {
 	sf::Rect<float> characterRect = character.getCurrentRect();
-	for(int x = characterRect.left/Field::fieldSize; x<characterRect.width/Field::fieldSize; x++)
+	for(int x = characterRect.left/Field::_fieldSize; x<characterRect.width/Field::_fieldSize; x++)
 	{
-		for (int y = characterRect.top / Field::fieldSize; y < characterRect.height / Field::fieldSize; y++)
+		for (int y = characterRect.top / Field::_fieldSize; y < characterRect.height / Field::_fieldSize; y++)
 		{		
 			
 		
@@ -197,15 +197,15 @@ Engine::GameState Engine::activateFieldsUnderCharacter(Character& character)
 
 bool Engine::playerWon()
 {
-	return characterOnTile(player, 10, 0);
+	return characterOnTile(_player, 10, 0);
 }
 
 bool Engine::characterOnTile(Character & character, int x, int y)
 {
 	sf::Rect<float> currentRect = character.getCurrentRect();
-	for (int xi = currentRect.left / Field::fieldSize; xi <= (currentRect.left + currentRect.width) / Field::fieldSize; xi++)
+	for (int xi = currentRect.left / Field::_fieldSize; xi <= (currentRect.left + currentRect.width) / Field::_fieldSize; xi++)
 	{
-		for (int yi = currentRect.top / Field::fieldSize; yi <= (currentRect.top + currentRect.height) / Field::fieldSize; yi++)
+		for (int yi = currentRect.top / Field::_fieldSize; yi <= (currentRect.top + currentRect.height) / Field::_fieldSize; yi++)
 		{
 			if (xi == x && yi == y)
 			{

@@ -25,9 +25,9 @@ private:
 	bool rectCollisionWithMap(const sf::Rect<float>& currentRect);
 	sf::Vector2f approximatePositionX(const sf::Rect<float>& currentRect);
 	sf::Vector2f approximatePositionY(const sf::Rect<float>& currentRect);
-	Player* player;
-	std::list<Character*>* enemies;
-	Map* map;
+	Player* _player;
+	std::list<Character*>* _enemies;
+	Map* _map;
 	float getUpMoveLimit(const sf::FloatRect& character, float dy) const;
 	float getRightMoveLimit(const sf::FloatRect& character, float dx) const;
 	float getDownMoveLimit(const sf::FloatRect& character, float dy) const;
